@@ -1,0 +1,4 @@
+Django==1.6.4
+gnupg==1.2.5
+psutil==1.2.1
+wsgiref==0.1.2
