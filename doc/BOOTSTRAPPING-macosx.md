@@ -19,10 +19,11 @@ ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 ```
 
 Make sure Homebrew is up to date (so it knows about the latest software
-packages) and then install Python. It will take a while to build Python.
+packages) and then install Python and GnuPG.
 
 ```shell
 brew update
+brew install gnupg2
 brew install python
 ```
 
