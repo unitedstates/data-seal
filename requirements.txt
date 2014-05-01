@@ -1,4 +1,5 @@
-Django==1.6.4
+https://www.djangoproject.com/download/1.7b3/tarball/#egg=Django==1.7b3
+#Django==1.7
 gnupg==1.2.5
 psutil==1.2.1
 wsgiref==0.1.2
