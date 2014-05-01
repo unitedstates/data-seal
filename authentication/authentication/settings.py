@@ -82,3 +82,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+############################################################
+# TODO: make this smarter. (this is currently just the
+#       OSX homebrew path to latest version of gpg2. see
+#       `doc/BOOTSTRAPPING-macosx.md` in repo.)
+GNUPG_BINARY = "/usr/local/Cellar/gnupg2/2.0.20/bin/gpg2"
+
