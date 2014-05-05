@@ -96,10 +96,17 @@ Install some dependencies:
 pip install -r requirements.txt
 ```
 
-[TODO: A SECTION ON INITIALIZING LOCAL TEST DATABASE, HERE.]
+You can now use Django to set up an initial database. This is stored in
+`authentication/db.sqlite3`, a [SQLite](https://sqlite.org/) database.
+It'll ask you to create an initial admin user: you should do this, so you
+can log into the site.
 
-From here, you should be able to run the local server by running the following
-command…
+```shell
+python authentication/manage.py migrate
+```
+
+Now that that's done, you should be able to run the local server by running
+the following command…
 
 ```shell
 python authentication/manage.py runserver
@@ -124,6 +131,9 @@ And you can run the server as before:
 python authentication/manage.py runserver
 ```
 
-If someone’s made an update to the `requirements.txt`, just do a
-`pip install -r requirements.txt` after "working on" the project and going
-into the repo directory.
+If someone’s made an update to the `requirements.txt` since you last checked
+out, just do a `pip install -r requirements.txt` after "working on" the project
+and going into the repo directory.
+
+If someone's made an update to any `models.py` files since you last checked out,
+run `python manage.py migrate` once again.
