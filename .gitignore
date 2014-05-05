@@ -55,3 +55,6 @@ docs/_build/
 .DS_Store
 authentication/db.sqlite3
 authentication/gpgdata
+
+authentication/server_documents/2*
+authentication/server_settings.py

@@ -84,9 +84,23 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 
+
 ############################################################
 # TODO: make this smarter. (this is currently just the
 #       OSX homebrew path to latest version of gpg2. see
 #       `doc/BOOTSTRAPPING-macosx.md` in repo.)
 GNUPG_BINARY = "/usr/local/Cellar/gnupg2/2.0.20/bin/gpg2"
 
+GNUPG_PASSPHRASE = SECRET_KEY
+# On initial setup, this will be used to populate the name & other info
+# for the server's default authentication key.
+GNUPG_IDENTITY_DEFAULTS = {
+  'name_real': 'Authentication.io',
+  'name_email': 'test@example.com',
+  'expire_date': '2015-01-01',
+  'passphrase': GNUPG_PASSPHRASE
+}
+# After initial setup (the script will tell you how to update this), this
+# line change from None to the long GPG key identifier.
+# i.e. GNUPG_IDENTITY = "4034E60AA7827C5DF21A89AAA993E7156E0E9923"
+GNUPG_IDENTITY = None
