@@ -61,6 +61,14 @@ class Document(models.Model):
 
 
   def test_user_file(self, uploaded_fp):
+    """
+    Given a user-uploaded file and this object (self), cryptographically
+    compare the user file against the GPG signature for this version
+    of the file.
+
+    At this point, we should be pretty sure it's the same file. (Filename, size,
+    hash, something that isn't CPU expensive like GPG.)
+    """
     # Assume that "uploaded_file" is a file pointer that hasn't
     # been handled yet. Can be in memory or a Django-controlled temp file,
     # we'll write it out to a file that we control just to be sure
@@ -100,6 +108,28 @@ class Document(models.Model):
     # result attrs: username, valid (True or False), timestamp (str of
     # unix timestamp), key_id, and a few others.
     return result
+
+
+  @staticmethod
+  def find_user_file(uploaded_fp):
+    """
+    Given a user file (via upload), hash the file's data with SHA512
+    and then look for a `Document` object that matches that hash.
+
+    We could stand to make this fuzzier / smarter, since we'll be checking
+    any matches we get here with GPG.
+    """
+    h512 = None
+    sha512 = hashlib.sha512()
+    for chunk in iter(lambda: uploaded_fp.read(sha512.block_size), b''):
+       sha512.update(chunk)
+    h512 = sha512.hexdigest()
+
+    results = Document.objects.filter(sha512=h512)
+
+    uploaded_fp.seek(0)
+
+    return results
 
 models.signals.post_save.connect(Document.sign_this_file, sender=Document)
 models.signals.post_save.connect(Document.save_filehashes, sender=Document)

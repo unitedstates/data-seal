@@ -103,4 +103,4 @@ GNUPG_IDENTITY_DEFAULTS = {
 # After initial setup (the script will tell you how to update this), this
 # line change from None to the long GPG key identifier.
 # i.e. GNUPG_IDENTITY = "4034E60AA7827C5DF21A89AAA993E7156E0E9923"
-GNUPG_IDENTITY = None
+GNUPG_IDENTITY = "8D060558938E026B3C1E920A9B32593BE5808A82"

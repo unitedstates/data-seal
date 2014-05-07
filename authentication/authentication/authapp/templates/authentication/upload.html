@@ -1,0 +1,32 @@
+{% extends "authentication/_base.html" %}
+{% load static %}
+
+{% block title %}Authentication.io: Check a File{% endblock %}
+
+{% block body %}
+  {% if post %}
+    {% if document %}
+      {% if validation and validation.valid %}
+        <p>The file you uploaded matches {{ document.name }}, uploaded on {{ document.uploaded }}.</p>
+      {% else %}
+        {# somehow got a SHA512 match but not a GPG match #}
+        <p>The file you uploaded partially matched {{ document.name }} (uploaded on {{ document.uploaded }}), but could not be validated for authenticity.</p>
+      {% endif %}
+    {% else %}
+      <p>The file you uploaded did not match any known files in the Authentication.io system.</p>
+    {% endif %}
+    <hr />
+  {% endif %}
+
+
+  <form enctype="multipart/form-data" method="post" action="{% url 'upload' %}">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+      </div>
+    {% endfor %}
+    <p><input type="submit" value="Check this file" /></p>
+  </form>
+{% endblock %}
