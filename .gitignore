@@ -58,3 +58,4 @@ authentication/gpgdata
 
 authentication/server_documents/2*
 authentication/server_settings.py
+*.swp
