@@ -7,6 +7,11 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
+# ONLY EDIT PROJECT DEFAULTS IN THIS FILE. IF YOU NEED TO CHANGE
+# SOMETHING FOR YOUR SYSTEM, GO UP ONE DIRECTORY AND COPY
+# "local_settings.py.example" INTO A "local_settings.py" FILE
+# AND DO ALL YOUR CONFIGURATION THERE. (Settings in that file override
+# ones in this one.)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -84,21 +89,25 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 ############################################################
-# TODO: make this smarter. (this is currently just the
-#       OSX homebrew path to latest version of gpg2. see
-#       `doc/BOOTSTRAPPING-macosx.md` in repo.)
+# Default settings for Authentication
+
+# TODO: make this smarter. (due to bug, this cannot be a symlink.
+#       so this is currently just the OSX homebrew path to the 2.0.20
+#       version of gpg2. see `doc/BOOTSTRAPPING-macosx.md` in repo.)
+#       don't edit it here, just update your local_settings.py, one directory
+#       above.
 GNUPG_BINARY = "/usr/local/Cellar/gnupg2/2.0.20/bin/gpg2"
 
 GNUPG_PASSPHRASE = SECRET_KEY
-# On initial setup, this will be used to populate the name & other info
-# for the server's default authentication key.
 GNUPG_IDENTITY_DEFAULTS = {
-    'name_real': 'Authentication.io',
-    'name_email': 'test@example.com',
-    'expire_date': '2015-01-01',
+    'name_real': 'Authentication Default Config',
+    'name_email': 'authentication@localhost',
     'passphrase': GNUPG_PASSPHRASE
 }
-# After initial setup (the script will tell you how to update this), this
-# line change from None to the long GPG key identifier.
-# i.e. GNUPG_IDENTITY = "4034E60AA7827C5DF21A89AAA993E7156E0E9923"
-GNUPG_IDENTITY = None
+GNUPG_IDENTITY_ID = None
+
+############################################################
+
+if os.path.exists(os.path.join(BASE_DIR, 'local_settings.py')):
+    print "Loading local settings"
+    from local_settings import *

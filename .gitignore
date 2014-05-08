@@ -57,5 +57,6 @@ authentication/db.sqlite3
 authentication/gpgdata
 
 authentication/server_documents/2*
-authentication/server_settings.py
+authentication/local_settings.py
 *.swp
+
