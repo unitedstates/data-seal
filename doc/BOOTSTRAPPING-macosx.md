@@ -96,20 +96,43 @@ Install some dependencies:
 pip install -r requirements.txt
 ```
 
-You can now use Django to set up an initial database. This is stored in
-`authentication/db.sqlite3`, a [SQLite](https://sqlite.org/) database.
+---
+
+Now you’ll want to configure the server. `cd` to the `authentication` folder.
+
+Inside this `authentication` folder, copy `local_settings.py.example` to
+`local_settings.py`. Then edit `local_settings.py`.
+
+* Make `SECRET_KEY` and `GNUPG_PASSPHRASE` strings that are somewhat
+  random. Use your favorite password generator or just bang on the
+  keyboard a bit.
+* Uncomment `GNUPG_BINARY` and set it to `"/usr/local/opt/gnupg2/bin/gpg2"`
+
+Now run the following command:
+
+```shell
+python manage.py gpginit
+```
+
+It will take a while, but you will now get a value for `GNUPG_IDENTITY`
+which you should throw into your `local_settings.py`.
+
+---
+
+Now set up an initial database. This is stored in
+`db.sqlite3`, a [SQLite](https://sqlite.org/) database.
 It'll ask you to create an initial admin user: you should do this, so you
 can log into the site.
 
 ```shell
-python authentication/manage.py migrate
+python manage.py migrate
 ```
 
 Now that that's done, you should be able to run the local server by running
 the following command…
 
 ```shell
-python authentication/manage.py runserver
+python manage.py runserver
 ```
 
 …and opening your web browser to `http://127.0.0.1:8000/`.
@@ -128,12 +151,14 @@ cd $PROJECT_HOME/odi-authentication
 And you can run the server as before:
 
 ```shell
-python authentication/manage.py runserver
+cd authentication
+python manage.py runserver
 ```
 
 If someone’s made an update to the `requirements.txt` since you last checked
-out, just do a `pip install -r requirements.txt` after "working on" the project
-and going into the repo directory.
+out, just do a `pip install -r requirements.txt` after activating the
+project’s virtual environment (`workon odi-authentication`) and going into
+the repo directory.
 
-If someone's made an update to any `models.py` files since you last checked out,
-run `python manage.py migrate` once again.
+If someone’s made an update to any `models.py` files since you last checked out,
+activate the virtual environment and run `python manage.py migrate` once again.

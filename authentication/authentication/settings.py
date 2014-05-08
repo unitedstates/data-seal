@@ -91,12 +91,8 @@ STATIC_URL = '/static/'
 ############################################################
 # Default settings for Authentication
 
-# TODO: make this smarter. (due to bug, this cannot be a symlink.
-#       so this is currently just the OSX homebrew path to the 2.0.20
-#       version of gpg2. see `doc/BOOTSTRAPPING-macosx.md` in repo.)
-#       don't edit it here, just update your local_settings.py, one directory
-#       above.
-GNUPG_BINARY = "/usr/local/Cellar/gnupg2/2.0.20/bin/gpg2"
+# TODO: make this smarter. (due to bug, this cannot be a symlink.)
+GNUPG_BINARY = "/usr/local/bin/gpg"
 
 GNUPG_PASSPHRASE = SECRET_KEY
 GNUPG_IDENTITY_DEFAULTS = {
@@ -109,5 +105,4 @@ GNUPG_IDENTITY_ID = None
 ############################################################
 
 if os.path.exists(os.path.join(BASE_DIR, 'local_settings.py')):
-    print "Loading local settings"
     from local_settings import *

@@ -6,7 +6,8 @@
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 # for a good guide on editing this file.
 
-
+import os
+BASE_DIR = os.path.dirname(__file__)
 
 ######################################################################
 
@@ -39,6 +40,7 @@ GNUPG_PASSPHRASE = 'CHANGEME'
 # set it the full path to the GnuPG executable on your computer:
 #GNUPG_BINARY = "C:/GnuPG/gpg.exe"
 #GNUPG_BINARY = "/usr/local/bin/gpg"
+#GNUPG_BINARY = "/usr/local/opt/gnupg2/bin/gpg2"  # for Mac OS X Homebrew
 
 # On initial setup, this will be used to populate the name & other info
 # for the server's default authentication key.
