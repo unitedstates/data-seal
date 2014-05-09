@@ -8,8 +8,8 @@ import os
 
 # Create your models here.
 class Document(models.Model):
-    name = models.CharField(max_length=200)
-    slug = models.SlugField()
+    name = models.CharField(max_length=200, blank=True)
+    #slug = models.SlugField()
     description = models.TextField(blank=True)
     license = models.TextField(blank=True)
 

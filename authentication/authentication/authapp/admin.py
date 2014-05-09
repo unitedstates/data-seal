@@ -3,7 +3,6 @@ from models import Document
 
 
 class DocumentAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"slug": ("name",)}
-
+  pass
 # Register your models here.
 admin.site.register(Document, DocumentAdmin)
