@@ -1,7 +1,8 @@
 from django import forms
 from django.shortcuts import get_object_or_404, render
 from authentication.authapp.models import Document
-
+import json
+from django.http import HttpResponse
 
 def index(request):
     return render(request, 'authentication/index.html')
@@ -28,6 +29,9 @@ def upload(request):
             if documents:
                 document = documents.first()
                 validation = document.test_user_file(request.FILES['user_file'])
+                return HttpResponse(json.dumps({'document': {"name":document.name, "sha512":document.sha512, "uploaded":str(document.uploaded)},'validation': {"is_valid":validation.valid, "fingerprint":validation.fingerprint}}), content_type = "application/json")
+            else:
+                return HttpResponse(json.dumps({'document': None,'validation': None}), content_type = "application/json")
     else:
         form = UploadForm()
 
@@ -38,6 +42,7 @@ def upload(request):
         'validation': validation
     })
 
+    
 
 ##########
 

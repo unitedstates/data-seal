@@ -1,32 +1,50 @@
-{% extends "authentication/_base.html" %}
 {% load static %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-{% block title %}Authentication.io: Check a File{% endblock %}
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'authentication/css/dropzone.css' %}" type="text/css" rel="stylesheet" />
+    <link href="{% static 'authentication/css/bootstrap.min.css' %}" type="text/css" rel="stylesheet" />
+    <link href="{% static 'authentication/css/bootstrap-theme.min.css' %}" type="text/css" rel="stylesheet" />
+    <style>
+      .row{word-wrap: normal;   
+        }
+    </style>
+    <title>{% block title %}Authentication.io: Check a File{% endblock %}</title>
+</head>
 {% block body %}
-  {% if post %}
-    {% if document %}
-      {% if validation and validation.valid %}
-        <p>The file you uploaded matches {{ document.name }}, uploaded on {{ document.uploaded }}.</p>
-      {% else %}
-        {# somehow got a SHA512 match but not a GPG match #}
-        <p>The file you uploaded partially matched {{ document.name }} (uploaded on {{ document.uploaded }}), but could not be validated for authenticity.</p>
-      {% endif %}
-    {% else %}
-      <p>The file you uploaded did not match any known files in the Authentication.io system.</p>
-    {% endif %}
-    <hr />
-  {% endif %}
-
-
-  <form enctype="multipart/form-data" method="post" action="{% url 'upload' %}">
-    {% csrf_token %}
-    {% for field in form %}
-      <div class="fieldWrapper">
-        {{ field.errors }}
-        {{ field.label_tag }} {{ field }}
-      </div>
-    {% endfor %}
-    <p><input type="submit" value="Check this file" /></p>
-  </form>
+<div class="container">
+    <h1>Drag-and-drop a file to confirm whether it's authentic!</h1>
+    <div id="formid">
+        <form id="dz" class="dropzone" enctype="multipart/form-data" method="post" action="{% url 'upload' %}">
+            {% csrf_token %}
+        </form>
+    </div>
+    <div id="response">
+    </div>
+</div>
+<script src="{% static 'authentication/js/jquery-1.11.1.min.js' %}"></script>
+<script src="{% static 'authentication/js/dropzone.js' %}"></script>
+<script type="text/javascript">
+Dropzone.options.dz = {
+    paramName: "user_file",
+    init: function() {
+        this.on("success", function(file) {
+            r = JSON.parse(file.xhr.response);
+            d = r.document;
+            v = r.validation;
+            if (v && v.is_valid == true) {
+                $("#response").html("<p><img style='text-align:center;display:block;margin:auto; max-width:100%' src='{% static 'authentication/images/loose_seal.png' %}'></p><h1 style='color:green'>YES!</h1><p>Document Name: '" + d.name + "'</p><p>SHA512 value of: '" + d.sha512 + "'.</p><p>Signer  fingerprint:  '" + v.fingerprint + "'.</p>");
+            }
+            else {
+              $("#response").html("<h1 style='color:red'>NO!</h1>");
+            }
+            this.removeFile(file)
+        });
+    }
+}
+</script>
 {% endblock %}
