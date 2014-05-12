@@ -12,5 +12,6 @@ urlpatterns = patterns('',
     url(r'^document/(?P<file_sha256>[0-9a-f]{64})/download/signature/$', 'authentication.authapp.views.file_signature', name='file_signature'),
     url(r'^admin/authapp/document/$', 'authentication.authapp.views.admin_document', name='admin_document'),
     url(r'^admin/login/', 'authentication.authapp.views.admin_login', name='admin_login'),
+    url(r'^admin/authapp/$', 'authentication.authapp.views.admin_authapp', name='admin_authapp'),
     url(r'^admin/', include(admin.site.urls)),
 )

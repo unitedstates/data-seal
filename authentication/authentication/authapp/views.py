@@ -102,3 +102,7 @@ def admin_document(request):
   return render(request, 'authentication/document.html', {
                   'documents': documents
                })
+
+@login_required
+def admin_authapp(request):
+  return render(request, 'authentication/admin_authapp.html')
