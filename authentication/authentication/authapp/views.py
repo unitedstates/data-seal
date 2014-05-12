@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from authentication.authapp.models import Document
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect
 
 def index(request):
     return render(request, 'authentication/index.html')
@@ -87,7 +88,7 @@ def admin_login(request):
        if user is not None:
          if user.is_active:
            login(request, user)
-           return admin_document(request)
+           return HttpResponseRedirect('/admin/authapp')
   else:
     form = LoginForm() 
   
