@@ -1,7 +1,7 @@
 from django import forms
 from django.shortcuts import get_object_or_404, render
 from authentication.authapp.models import Document
-
+from django.contrib.auth.decorators import login_required
 
 def index(request):
     return render(request, 'authentication/index.html')
@@ -72,3 +72,10 @@ def file_signature(request, file_slug, file_sha256):
     document = get_object_or_404(Document, slug=file_slug, sha256=file_sha256)
     print document
     raise NotImplementedError("TODO")
+
+@login_required
+def admin_document(request):
+  documents = Document.objects.all() 
+  return render(request, 'authentication/document.html', {
+                  'documents': documents
+               })

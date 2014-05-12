@@ -1,0 +1,38 @@
+{% extends "authentication/_base.html" %}
+{% load static %}
+
+{% block body %}
+  <link href="{{ STATIC_URL }}authentication/DataTables-1.10.0/media/css/jquery.dataTables.css" rel="stylesheet">
+  <script src="{{ STATIC_URL }}authentication/DataTables-1.10.0/media/js/jquery.dataTables.min.js"></script>
+
+  <h1> Documents </h1>
+  <a class="btn btn-default" href="/admin/authapp/document/add/"><span class="glyphicon glyphicon-plus"></span></a>
+
+  <table name="documents" id="documents">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Date Added</th>
+        <th>Date Updated</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for doc in documents %}
+      <tr>
+        <td><a href="/admin/authapp/document/{{ doc.id }}">{{ doc.name }}</a></td>
+        <td>{{ doc.uploaded }}</td>
+        <td>{{ dod.updated }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+<script>
+  $(document).ready(function() {
+    $('#documents').dataTable();
+  } );
+</script>
+
+{% endblock %}
+
