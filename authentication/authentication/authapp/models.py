@@ -8,12 +8,12 @@ import os
 
 # Create your models here.
 class Document(models.Model):
+    doc_file = models.FileField(upload_to="server_documents/%Y/%m")
     name = models.CharField(max_length=200, blank=True)
     #slug = models.SlugField()
     description = models.TextField(blank=True)
     license = models.TextField(blank=True)
 
-    doc_file = models.FileField(upload_to="server_documents/%Y/%m")
     # filename: os.path.basename(doc_file.name)
     # filesize: doc_file.size
 

@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 import json
+from django.forms import TextInput, Textarea
 
 def index(request):
     return render(request, 'authentication/index.html')
@@ -18,6 +19,23 @@ class UploadForm(forms.Form):
 class LoginForm(forms.Form):
     Username = forms.CharField(max_length=50)
     Password = forms.CharField(max_length=50)
+
+class DocumentForm(forms.ModelForm):
+  class Meta:
+    model = Document
+    fields = ['doc_file', 'name', 'description', 'license']
+    widgets = {
+               'name': TextInput(attrs={'class': 'form-control'}),
+               'description': Textarea(attrs={'class': 'form-control'}),
+               'license': Textarea(attrs={'class': 'form-control'})
+              }
+#    Name = forms.CharField(max_length=50, required=False)
+#    Description = forms.CharField(max_length=200, required=False)
+#    License = forms.CharField(max_length=200, required=False)
+#    File = forms.FileField(label='Doc File')
+#    Sha256 = forms.CharField(max_length=256, required=False)
+#    Sha512 = forms.CharField(max_length=512, required=False)
+#    Gpgsig = forms.CharField(required=False)
 
 def upload(request):
     post = False
@@ -111,3 +129,15 @@ def admin_document(request):
 @login_required
 def admin_authapp(request):
   return render(request, 'authentication/admin_authapp.html')
+
+@login_required
+def add(request):
+  if request.method == 'POST':
+    form = DocumentForm(request.POST, request.FILES)
+    if form.is_valid():
+      new_doc = form.save()
+      return HttpResponseRedirect('/admin/authapp/document/'+str(new_doc.id))
+  form = DocumentForm()
+  return render(request, 'authentication/add.html', {
+                 'form': form
+               })

@@ -1,0 +1,26 @@
+{% extends "authentication/_base.html" %}
+{% load static %} <!DOCTYPE html>
+{% block body %}
+  
+  <title>{% block title %}Authentication.io Add File {% endblock %}</title>
+  <!-- Custom styles for this template -->
+  <link href="{{ STATIC_URL }}authentication/bootstrap-3.1.1-dist/css/add.css" rel="stylesheet">
+
+  <div class="container">
+  <form class="form-document" role="form" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <h2 class="form-document-heading">Add a file</h2>
+    
+    {% for field in form %}
+      <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+      </div>
+    {% endfor %}
+    
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+  </form>
+
+  </div> <!-- /container -->
+{% endblock %}
