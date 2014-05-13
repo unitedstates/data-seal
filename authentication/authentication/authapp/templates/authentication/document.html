@@ -14,23 +14,64 @@
         <th>Name</th>
         <th>Date Added</th>
         <th>Date Updated</th>
+        <th>Delete?</th>
       </tr>
     </thead>
     <tbody>
       {% for doc in documents %}
-      <tr>
+      <tr id="row{{ doc.id }}">
         <td><a href="/admin/authapp/document/{{ doc.id }}">{{ doc.name }}</a></td>
         <td>{{ doc.uploaded }}</td>
-        <td>{{ dod.updated }}</td>
+        <td>{{ doc.updated }}</td>
+        <td><button class = "btn" data-toggle="modal" data-target="#deleteForm{{ doc.id }}"><span class="glyphicon glyphicon-remove"></span></button></td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 
-
+  <!------------------Delete Form--------------------- -->
+  {% for doc in documents %}
+    <div class="modal fade" id="deleteForm{{ doc.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete {{ doc.name }}?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <form role="form" method="post" enctype="multipart/form-data" class="form" name={{ doc.id }}> 
+              {% csrf_token %}
+              <input type="text" name="doc_id" class = "hidden" value="{{doc.id }}">
+              <button type="submit" value= "Submit" class="btn btn-primary">Confirm</button> 
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+<!--------------------------------------- -->
 <script>
   $(document).ready(function() {
     $('#documents').dataTable();
+
+    $('.form').submit(function(event) {
+        event.preventDefault();
+        doc_id = $(this).attr('name')
+        $.ajax({
+          url: "/admin/authapp/document/",
+          type: "POST",
+          data: $(this).serialize(),
+          success: function(data) {
+            $('#deleteForm'+doc_id).modal('hide');
+            $('#row'+doc_id).remove();
+          }
+        });
+    });
+
   } );
 </script>
 

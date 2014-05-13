@@ -1,6 +1,9 @@
 {% extends "authentication/add.html" %}
 {% load static %} <!DOCTYPE html>
 <title>{% block title %}Authentication.io Edit File {% endblock %}</title>
+{% block description %}
+  <h2 class="form-document-heading">Edit a file</h2>
+{% endblock %}
 {% block hashes %}
 
 <div class="panel panel-default">
@@ -24,3 +27,4 @@
   </div>
 </div>
 {% endblock %}
+{% block action %} Save Changes {% endblock %}

@@ -10,8 +10,9 @@
   <form class="form-document" role="form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
-    <h2 class="form-document-heading">Add a file</h2>
-    
+    {% block description %} 
+      <h2 class="form-document-heading">Add a file</h2>
+    {% endblock %}
     {% for field in form %}
     {% if field.field.required %}
       <div class="fieldWrapper">
@@ -44,7 +45,9 @@ Additional Information (Optional)
 </div>
 
     {% block hashes %}{% endblock %}
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">
+    {% block action %}Submit{% endblock %}
+    </button>
   </form>
   </div> <!-- /container -->
 {% endblock %}
