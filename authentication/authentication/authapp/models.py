@@ -25,7 +25,10 @@ class Document(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
+      if self.name:
         return self.name
+      else:
+        return self.doc_file.url.split('/')[-1]
 
     @classmethod
     def sign_this_file(cls, sender, instance, created, **kwargs):

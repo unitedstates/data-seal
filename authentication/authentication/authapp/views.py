@@ -29,13 +29,6 @@ class DocumentForm(forms.ModelForm):
                'description': Textarea(attrs={'class': 'form-control'}),
                'license': Textarea(attrs={'class': 'form-control'})
               }
-#    Name = forms.CharField(max_length=50, required=False)
-#    Description = forms.CharField(max_length=200, required=False)
-#    License = forms.CharField(max_length=200, required=False)
-#    File = forms.FileField(label='Doc File')
-#    Sha256 = forms.CharField(max_length=256, required=False)
-#    Sha512 = forms.CharField(max_length=512, required=False)
-#    Gpgsig = forms.CharField(required=False)
 
 def upload(request):
     post = False
@@ -121,10 +114,17 @@ def admin_login(request):
 
 @login_required
 def admin_document(request):
-  documents = Document.objects.all() 
-  return render(request, 'authentication/document.html', {
-                  'documents': documents
-               })
+
+  if request.method == 'POST':
+    doc_id = request.POST['doc_id']
+    d = Document.objects.get(id=doc_id)
+    d.delete()
+    return HttpResponse()
+  else:
+    documents = Document.objects.all() 
+    return render(request, 'authentication/document.html', {
+                    'documents': documents
+                 })
 
 @login_required
 def admin_authapp(request):

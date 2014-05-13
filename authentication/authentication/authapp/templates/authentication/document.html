@@ -20,7 +20,7 @@
     <tbody>
       {% for doc in documents %}
       <tr id="row{{ doc.id }}">
-        <td><a href="/admin/authapp/document/{{ doc.id }}">{{ doc.name }}</a></td>
+        <td><a href="/admin/authapp/document/{{ doc.id }}">{{ doc }}</a></td>
         <td>{{ doc.uploaded }}</td>
         <td>{{ doc.updated }}</td>
         <td><button class = "btn" data-toggle="modal" data-target="#deleteForm{{ doc.id }}"><span class="glyphicon glyphicon-remove"></span></button></td>
@@ -39,7 +39,7 @@
             <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
           </div>
           <div class="modal-body">
-            Are you sure you want to delete {{ doc.name }}?
+            Are you sure you want to delete {{ doc }}?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
