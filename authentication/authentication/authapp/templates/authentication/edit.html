@@ -1,0 +1,26 @@
+{% extends "authentication/add.html" %}
+{% load static %} <!DOCTYPE html>
+<title>{% block title %}Authentication.io Edit File {% endblock %}</title>
+{% block hashes %}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4 class="panel-title">
+      <a data-toggle="collapse" data-parent="#accordion" href="#HashInfo">Hash Data</a>
+    </h4>
+  </div>
+  <div id="HashInfo" class="panel-collapse collapse">
+    <div class="panel-body">
+      <div class="sha256">
+        {{ doc.sha256 }}
+      </div>
+      <div class="sha512">
+        {{ doc.sha512 }}
+      </div>
+      <div class="gpgsig">
+        {{ doc.gpgsig }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

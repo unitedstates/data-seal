@@ -14,5 +14,6 @@ urlpatterns = patterns('',
     url(r'^admin/login/', 'authentication.authapp.views.admin_login', name='admin_login'),
     url(r'^admin/authapp/$', 'authentication.authapp.views.admin_authapp', name='admin_authapp'),
     url(r'^admin/authapp/document/add/$', 'authentication.authapp.views.add', name='add'),
+    url(r'^admin/authapp/document/(?P<file_id>[0-9]+)/$', 'authentication.authapp.views.edit', name='edit'),
     url(r'^admin/', include(admin.site.urls)),
 )

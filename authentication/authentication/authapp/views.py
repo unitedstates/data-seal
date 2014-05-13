@@ -141,3 +141,18 @@ def add(request):
   return render(request, 'authentication/add.html', {
                  'form': form
                })
+
+@login_required
+def edit(request, file_id):
+  old_doc = Document.objects.get(id=file_id)
+  if request.method == 'POST':
+    form = DocumentForm(request.POST, request.FILES, instance=old_doc)
+    if form.is_valid():
+      form.save()
+      return HttpResponseRedirect('/admin/authapp/document/'+str(old_doc.id))
+  form = DocumentForm(instance=old_doc)
+  return render(request, 'authentication/edit.html', {
+                 'form': form,
+                 'doc': old_doc
+               })
+      

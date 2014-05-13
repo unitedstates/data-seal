@@ -13,14 +13,38 @@
     <h2 class="form-document-heading">Add a file</h2>
     
     {% for field in form %}
+    {% if field.field.required %}
       <div class="fieldWrapper">
         {{ field.errors }}
         {{ field.label_tag }} {{ field }}
       </div>
+    {% endif %}
     {% endfor %}
-    
+
+<div class="panel panel-default">
+<div class="panel-heading">
+<h4 class="panel-title">
+<a data-toggle="collapse" data-parent="#accordion" href="#DocInfo">
+Additional Information (Optional)
+</a>
+</h4>
+</div>
+<div id="DocInfo" class="panel-collapse collapse">
+<div class="panel-body">
+    {% for field in form %}
+    {% if not field.field.required %}
+      <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+      </div>
+    {% endif %}
+    {% endfor %}
+</div>
+</div>
+</div>
+
+    {% block hashes %}{% endblock %}
     <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
   </form>
-
   </div> <!-- /container -->
 {% endblock %}
