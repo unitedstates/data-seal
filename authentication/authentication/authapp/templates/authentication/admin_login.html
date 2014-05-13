@@ -1,0 +1,44 @@
+{% load static %} <!DOCTYPE html>
+<html smlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{% block title %}Authentication.io login {% endblock %}</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="{{ STATIC_URL}}authentication/bootstrap-3.1.1-dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{{ STATIC_URL }}authentication/bootstrap-3.1.1-dist/css/signin.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="container">
+  <form class="form-signin" role="form" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <h2 class="form-signin-heading">Please sign in</h2>
+    
+    {% for field in form %}
+      <div class="fieldWrapper">
+        {{ field.errors }}
+        <input id="{{ field.id }}" 
+               maxlength="{{ field.maxlength }}" 
+               name="{{ field.name }}" 
+               type="{{ field.name }}" 
+               placeholder="{{ field.name }}" 
+               type="{{field.name }}" 
+               class="form-control" 
+               required
+        >
+      </div>
+    {% endfor %}
+    
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+  </form>
+
+  </div> <!-- /container -->
+</body>
+</html>
+

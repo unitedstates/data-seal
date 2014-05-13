@@ -1,12 +1,13 @@
 from django import forms
 from django.shortcuts import get_object_or_404, render
 from authentication.authapp.models import Document
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
 import json
-from django.http import HttpResponse
 
 def index(request):
     return render(request, 'authentication/index.html')
-
 
 ##########
 
@@ -14,6 +15,9 @@ def index(request):
 class UploadForm(forms.Form):
     user_file = forms.FileField(label="File you want to check")
 
+class LoginForm(forms.Form):
+    Username = forms.CharField(max_length=50)
+    Password = forms.CharField(max_length=50)
 
 def upload(request):
     post = False
@@ -77,3 +81,33 @@ def file_signature(request, file_slug, file_sha256):
     document = get_object_or_404(Document, slug=file_slug, sha256=file_sha256)
     print document
     raise NotImplementedError("TODO")
+
+def admin_login(request):
+  logout(request)
+  if request.method == 'POST':
+    form = LoginForm(request.POST)
+    if form.is_valid():
+       username = request.POST['Username']
+       password = request.POST['Password']
+       user = authenticate(username=username, password=password)
+       if user is not None:
+         if user.is_active:
+           login(request, user)
+           return HttpResponseRedirect('/admin/authapp')
+  else:
+    form = LoginForm() 
+  
+  return render(request, 'authentication/admin_login.html', {
+                 'form': form
+                })
+
+@login_required
+def admin_document(request):
+  documents = Document.objects.all() 
+  return render(request, 'authentication/document.html', {
+                  'documents': documents
+               })
+
+@login_required
+def admin_authapp(request):
+  return render(request, 'authentication/admin_authapp.html')

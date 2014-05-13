@@ -1,0 +1,15 @@
+{% extends "authentication/_base.html" %}
+{% load static %}
+
+{% block body %}
+  <link href="{{ STATIC_URL }}authentication/DataTables-1.10.0/media/css/jquery.dataTables.css" rel="stylesheet">
+  <script src="{{ STATIC_URL }}authentication/DataTables-1.10.0/media/js/jquery.dataTables.min.js"></script>
+
+  <h1> Documents </h1>
+
+  <a class="btn btn-default" href="/admin/authapp/document/">View All Documents</a>
+  <a class="btn btn-default" href="/admin/authapp/document/add/">Add New Document</a>
+
+
+{% endblock %}
+

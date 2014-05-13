@@ -1,13 +1,58 @@
 {% load static %}<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
 <head>
-<meta charset="utf-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-<link href="{% static 'authentication/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
-<title>{% block title %}Authentication.io{% endblock %}</title>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+  <link href="{% static 'authentication/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
+  <link href="{{ STATIC_URL }}authentication/bootstrap-3.1.1-dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}authentication/bootstrap-3.1.1-dist/css/starter-template.css" rel="stylesheet">
+  <script src="{{ STATIC_URL }}authentication/jquery-1.11.1.min.js"></script>
+  <script src="{{ STATIC_URL }}authentication/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
+
+  <title>{% block title %}Authentication.io{% endblock %}</title>
 </head>
 
 <body>
-{% block body %}{% endblock %}
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Authentication.io</a>
+    </div>
+    
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/upload/">Upload</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      {% if user.is_authenticated %}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="/admin/password_change">Change Password</a></li>
+            <li><a href="/admin/auth/user">Add User</a></li>
+            <li class="divider"></li>
+            <li><a href="/admin/logout/">Log out</a></li>
+          </ul>
+        </li>
+      {% else %}
+        <li><a href="/admin/login/">Log in</a></li>
+      {% endif %}
+      </ul>
+    </div><!--/.nav-collapse -->
+    
+  </div>
+</div>
+
+<div class="container">
+  {% block body %}{% endblock %}
+</div><!-- /.container -->
+
 </body>
 </html>
