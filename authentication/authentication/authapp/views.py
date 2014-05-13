@@ -3,7 +3,8 @@ from django.shortcuts import get_object_or_404, render
 from authentication.authapp.models import Document
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+import json
 
 def index(request):
     return render(request, 'authentication/index.html')
@@ -32,6 +33,9 @@ def upload(request):
             if documents:
                 document = documents.first()
                 validation = document.test_user_file(request.FILES['user_file'])
+                return HttpResponse(json.dumps({'document': {"name":document.name, "sha512":document.sha512, "uploaded":str(document.uploaded)},'validation': {"is_valid":validation.valid, "fingerprint":validation.fingerprint}}), content_type = "application/json")
+            else:
+                return HttpResponse(json.dumps({'document': None,'validation': None}), content_type = "application/json")
     else:
         form = UploadForm()
 
@@ -42,6 +46,7 @@ def upload(request):
         'validation': validation
     })
 
+    
 
 ##########
 
