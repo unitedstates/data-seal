@@ -1,0 +1,12 @@
+#id_sha256{
+  cursor: text;
+}
+#id_sha512{
+  cursor: text;
+}
+#id_gpgsig{
+  cursor: text;
+}
+#id_doc_file{
+  display: inline;
+}
