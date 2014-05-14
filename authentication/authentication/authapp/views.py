@@ -149,6 +149,19 @@ def admin_user_add(request):
                  'form': form
                })
 
+@login_required
+def admin_user_edit(request, user_id):
+  old_user = User.objects.get(id=user_id)
+  if request.method == 'POST':
+    form = UserForm(request.POST, instance=old_user)
+    if form.is_valid():
+      form.save()
+      return HttpResponseRedirect('/admin/auth/user/'+str(old_user.id))
+  form = UserForm(instance=old_user)
+  return render(request, 'authentication/admin_user_add.html', {
+                 'form': form
+               })
+      
 
 @login_required
 def admin_document(request):

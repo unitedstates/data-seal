@@ -18,5 +18,6 @@ urlpatterns = patterns('',
     url(r'^admin/logout', 'authentication.authapp.views.admin_logout', name='admin_logout'),
     url(r'^admin/auth/user/$', 'authentication.authapp.views.admin_user', name="admin_user"),
     url(r'^admin/auth/user/add/$', 'authentication.authapp.views.admin_user_add', name="admin_user_add"),
+    url(r'^admin/auth/user/(?P<user_id>[0-9]+)/$', 'authentication.authapp.views.admin_user_edit', name="admin_user_edit"),
     url(r'^admin/', include(admin.site.urls)),
 )
