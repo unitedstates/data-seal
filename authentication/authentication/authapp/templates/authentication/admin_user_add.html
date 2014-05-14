@@ -1,0 +1,61 @@
+{% extends "authentication/_base.html" %}
+{% load static %} <!DOCTYPE html>
+{% block title %}Authentication.io Add File {% endblock %}
+
+{% block body %}
+  
+  <!-- Custom styles for this template -->
+  <link href="{{ STATIC_URL }}authentication/css/add.css" rel="stylesheet">
+
+  <div class="container">
+  <form class="form-horizontal form-document" role="form" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    {% block description %} 
+      <h2 class="form-document-heading">Add a user</h2>
+    {% endblock %}
+    {% for field in form %}
+    {% if field.field.required %}
+      <div class="form-group">
+        {{ field.errors }}
+        <label for="id_{{field.id_for_label}}" class="col-sm-2 control-label">
+        {{field.label}}
+        </label>
+        <div class="col-sm-10">
+          {{ field }}
+        </div>
+      </div>
+    {% endif %}
+    {% endfor %}
+
+<div class="panel panel-default">
+<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href="#DocInfo">
+<h4 class="panel-title">
+Additional Information (Optional)
+</h4>
+</div>
+<div id="DocInfo" class="panel-collapse collapse">
+<div class="panel-body">
+    {% for field in form %}
+    {% if not field.field.required %}
+      <div class="form-group">
+        {{ field.errors }}
+        <label for="id_{{field.id_for_label}}" class="col-sm-2 control-label">
+        {{field.label}}
+        </label>
+        <div class="col-sm-10">
+          {{ field }}
+        </div>
+      </div>
+    {% endif %}
+    {% endfor %}
+</div>
+</div>
+</div>
+
+    <button class="btn btn-lg btn-primary" type="submit">
+    {% block action %}Submit{% endblock %}
+    </button>
+  </form>
+  </div> <!-- /container -->
+{% endblock %}

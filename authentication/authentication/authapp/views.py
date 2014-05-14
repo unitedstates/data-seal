@@ -34,6 +34,14 @@ class DocumentForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
   class Meta:
     model = User
+    fields = ['username', 'password', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
+    widgets = {
+               'username': TextInput(attrs={'class': 'form-control'}),
+               'password': TextInput(attrs={'class': 'form-control'}),
+               'first_name': TextInput(attrs={'class': 'form-control'}),
+               'last_name': TextInput(attrs={'class': 'form-control'}),
+               'email': TextInput(attrs={'class': 'form-control'}),
+               }
 
 def upload(request):
     post = False
@@ -128,6 +136,19 @@ def admin_user(request):
   return render(request, 'authentication/users.html', {
                   'users': users
                 })
+
+@login_required
+def admin_user_add(request):
+  if request.method == 'POST':
+    form = UserForm(request.POST)
+    if form.is_valid():
+      new_user = form.save()
+      return HttpResponseRedirect('/admin/auth/user/'+str(new_user.id))
+  form = UserForm()
+  return render(request, 'authentication/admin_user_add.html', {
+                 'form': form
+               })
+
 
 @login_required
 def admin_document(request):
