@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from authentication.authapp.models import Document
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 import json
 from django.forms import TextInput, Textarea
@@ -29,6 +30,10 @@ class DocumentForm(forms.ModelForm):
                'description': Textarea(attrs={'class': 'form-control'}),
                'license': Textarea(attrs={'class': 'form-control'})
               }
+
+class UserForm(forms.ModelForm):
+  class Meta:
+    model = User
 
 def upload(request):
     post = False
@@ -116,6 +121,13 @@ def admin_login(request):
 def admin_logout(request):
   logout(request)
   return HttpResponseRedirect('/admin/login')
+
+@login_required
+def admin_user(request):
+  users = User.objects.all()
+  return render(request, 'authentication/users.html', {
+                  'users': users
+                })
 
 @login_required
 def admin_document(request):

@@ -1,0 +1,55 @@
+{% extends "authentication/_base.html" %}
+{% load static %}
+
+{% block body %}
+  <link href="{{ STATIC_URL }}authentication/DataTables-1.10.0/media/css/jquery.dataTables.css" rel="stylesheet">
+  <script src="{{ STATIC_URL }}authentication/DataTables-1.10.0/media/js/jquery.dataTables.min.js"></script>
+  <link href="{{ STATIC_URL }}authentication/css/document.css" rel="stylesheet">
+
+  <h1> Users </h1>
+  <a class="btn btn-lg btn-primary" href="/admin/auth/user/add/">Add new user</a>
+
+  <table name="users" id="users">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Is Admin?</th>
+        <th>Is Active?</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr id="row{{ user.id }}">
+        <td><a href="/admin/auth/user/{{ user.id }}">{{ user.username }}</a></td>
+        <td>{{ user.email }}</td>
+        <td>{% if user.is_superuser %}
+              <span class="glyphicon glyphicon-ok"></span>
+            {% else %}
+              <span class="glyphicon glyphicon-remove"></span>
+            {% endif %}
+        </td>
+
+        <td>{% if user.is_active %}
+              <span class="glyphicon glyphicon-ok"></span>
+            {% else %}
+              <span class="glyphicon glyphicon-remove"></span>
+            {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<script>
+  $(document).ready(function() {
+    oTable = $('#users').dataTable( {
+        "oLanguage": { "sSearch": ""}
+    });
+    $('div.dataTables_filter input').addClass('form-control').attr("placeholder", "Search");
+
+  } );
+</script>
+
+{% endblock %}
+
