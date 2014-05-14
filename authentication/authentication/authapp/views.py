@@ -2,6 +2,7 @@ from django import forms
 from django.shortcuts import get_object_or_404, render
 from authentication.authapp.models import Document
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
@@ -130,33 +131,37 @@ def admin_logout(request):
   logout(request)
   return HttpResponseRedirect('/admin/login')
 
-@login_required
+@staff_member_required
 def admin_user(request):
   users = User.objects.all()
   return render(request, 'authentication/users.html', {
                   'users': users
                 })
 
-@login_required
+@staff_member_required
 def admin_user_add(request):
   if request.method == 'POST':
     form = UserForm(request.POST)
     if form.is_valid():
       new_user = form.save()
-      return HttpResponseRedirect('/admin/auth/user/'+str(new_user.id))
+      new_user.set_password(form.cleaned_data['password'])
+      new_user.save()
+      return HttpResponseRedirect('/admin/auth/user/')
   form = UserForm()
   return render(request, 'authentication/admin_user_add.html', {
                  'form': form
                })
 
-@login_required
+@staff_member_required
 def admin_user_edit(request, user_id):
   old_user = User.objects.get(id=user_id)
   if request.method == 'POST':
     form = UserForm(request.POST, instance=old_user)
     if form.is_valid():
-      form.save()
-      return HttpResponseRedirect('/admin/auth/user/'+str(old_user.id))
+      updated_user = form.save()
+      updated_user.set_password(form.cleaned_data['password'])
+      updated_user.save()
+      return HttpResponseRedirect('/admin/auth/user/')
   form = UserForm(instance=old_user)
   return render(request, 'authentication/admin_user_add.html', {
                  'form': form
