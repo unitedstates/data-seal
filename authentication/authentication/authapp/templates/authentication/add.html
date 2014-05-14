@@ -7,7 +7,7 @@
   <link href="{{ STATIC_URL }}authentication/css/add.css" rel="stylesheet">
 
   <div class="container">
-  <form class="form-document" role="form" method="post" enctype="multipart/form-data">
+  <form class="form-horizontal form-document" role="form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
     {% block description %} 
@@ -15,28 +15,36 @@
     {% endblock %}
     {% for field in form %}
     {% if field.field.required %}
-      <div class="fieldWrapper">
+      <div class="form-group">
         {{ field.errors }}
-        {{ field.label_tag }} {{ field }}
+        <label for="id_{{field.id_for_label}}" class="col-sm-2 control-label">
+        {{field.label}}
+        </label>
+        <div class="col-sm-10">
+          {{ field }}
+        </div>
       </div>
     {% endif %}
     {% endfor %}
 
 <div class="panel panel-default">
-<div class="panel-heading">
+<div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href="#DocInfo">
 <h4 class="panel-title">
-<a data-toggle="collapse" data-parent="#accordion" href="#DocInfo">
 Additional Information (Optional)
-</a>
 </h4>
 </div>
 <div id="DocInfo" class="panel-collapse collapse">
 <div class="panel-body">
     {% for field in form %}
     {% if not field.field.required %}
-      <div class="fieldWrapper">
+      <div class="form-group">
         {{ field.errors }}
-        {{ field.label_tag }} {{ field }}
+        <label for="id_{{field.id_for_label}}" class="col-sm-2 control-label">
+        {{field.label}}
+        </label>
+        <div class="col-sm-10">
+          {{ field }}
+        </div>
       </div>
     {% endif %}
     {% endfor %}
@@ -45,7 +53,7 @@ Additional Information (Optional)
 </div>
 
     {% block hashes %}{% endblock %}
-    <button class="btn btn-lg btn-primary btn-block" type="submit">
+    <button class="btn btn-lg btn-primary" type="submit">
     {% block action %}Submit{% endblock %}
     </button>
   </form>

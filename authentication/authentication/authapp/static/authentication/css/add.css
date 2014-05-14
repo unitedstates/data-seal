@@ -5,16 +5,12 @@ body {
 }
 
 .form-document {
-  max-width: 330px;
+  max-width: 550px;
   padding: 15px;
   margin: 0 auto;
 }
-.form-document .form-document-heading,
-.form-document .checkbox {
+.form-document .form-document-heading{
   margin-bottom: 10px;
-}
-.form-document .checkbox {
-  font-weight: normal;
 }
 .form-document .form-control {
   position: relative;
@@ -38,7 +34,16 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+.form-document input[type="file"]{
+  padding-top: 5px;
+}
 .btn-primary{
   background-color: #333;
   border-color: #000;
+}
+.btn-primary:hover{
+  background-color: #555;
+}
+.panel-heading:hover{
+  background-color: #ccc;
 }
