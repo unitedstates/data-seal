@@ -113,6 +113,11 @@ def admin_login(request):
                 })
 
 @login_required
+def admin_logout(request):
+  logout(request)
+  return HttpResponseRedirect('/admin/login')
+
+@login_required
 def admin_document(request):
 
   if request.method == 'POST':
