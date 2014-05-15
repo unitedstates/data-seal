@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 import json
+from zipfile import ZipFile, is_zipfile
+import os
 from django.forms import TextInput, Textarea, CheckboxInput
 
 def index(request):
@@ -191,13 +193,39 @@ def admin_document(request):
 def admin_authapp(request):
   return render(request, 'authentication/admin_authapp.html')
 
+def handleZipFile(input_file, path):
+  #Extract all files from zip
+  z = ZipFile(input_file)
+  z.extractall(path)
+
+  #Make Document for all files, ignoring directories, making sure to use full path
+  for name in z.namelist():
+    full_name = os.path.join(path, name)
+    if name.startswith('__MACOSX/'):
+      continue
+    if os.path.isdir(full_name):
+      continue
+    new_doc = Document(doc_file=full_name)
+    new_doc.save()
+
+    #If we run into another zip file, unzip that one too
+    if is_zipfile(full_name):
+      new_path = os.path.dirname(new_doc.doc_file.url)
+      handleZipFile(new_doc.doc_file, new_path)
+
 @login_required
 def add(request):
   if request.method == 'POST':
     form = DocumentForm(request.POST, request.FILES)
     if form.is_valid():
       new_doc = form.save()
+      #Handle zip files
+      if is_zipfile(request.FILES['doc_file']):
+         path = os.path.dirname(new_doc.doc_file.url)
+         handleZipFile(request.FILES['doc_file'], path)
+
       return HttpResponseRedirect('/admin/authapp/document/'+str(new_doc.id))
+  
   form = DocumentForm()
   return render(request, 'authentication/add.html', {
                  'form': form
