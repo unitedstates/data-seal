@@ -2,22 +2,19 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="{% static 'authentication/css/dropzone.css' %}" type="text/css" rel="stylesheet" />
-    <link href="{% static 'authentication/css/bootstrap.min.css' %}" type="text/css" rel="stylesheet" />
-    <link href="{% static 'authentication/css/bootstrap-theme.min.css' %}" type="text/css" rel="stylesheet" />
-    <style>
-      .row{word-wrap: normal;   
-        }
-    </style>
-    <title>{% block title %}Authentication.io: Check a File{% endblock %}</title>
-</head>
+{% block title %}Authentication.io: Check a File{% endblock %}
 {% block body %}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="{% static 'authentication/css/dropzone.css' %}" type="text/css" rel="stylesheet" />
+  <link href="{% static 'authentication/bootstrap-3.1.1-dist/css/bootstrap-theme.min.css' %}" type="text/css" rel="stylesheet" />
+  <link href="{{STATIC_URL}}authentication/css/edit.css" rel="stylesheet" />
+  <style>
+    .row{word-wrap: normal;   
+      }
+  </style>
+
+
 <div class="container">
     <h1>Drag-and-drop a file to confirm whether it's authentic!</h1>
     <div id="formid">
@@ -26,6 +23,38 @@
         </form>
     </div>
     <div id="response">
+
+    </div>
+    <div class="panel panel-default hidden">
+      <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href="#FileInfo">
+        <h4 class="panel-title">File Details</h4>
+      </div>
+      <div id="FileInfo" class="panel-collapse collapse">
+        <div class="panel-body" id="details">
+          <div class="form-horizontal">
+          
+          <div class="form-group">
+            <label for="doc_name" class="col-sm-2 control-label">Document Name:</label>
+            <div class="col-sm-10">
+              <input type="text" id="doc_name" class="form-control" readonly></input>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="id_sha512" class="col-sm-2 control-label">SHA512:</label>
+            <div class="col-sm-10">
+              <input type="text" id="id_sha512" class="form-control" readonly></input>
+            </div>
+            </div>
+          
+          <div class="form-group">
+            <label for="fingerprint" class="col-sm-2 control-label">Signer Fingerprint:</label>
+            <div class="col-sm-10">
+              <input type="text" id="fingerprint" class="form-control" readonly></input>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
 <script src="{% static 'authentication/js/jquery-1.11.1.min.js' %}"></script>
@@ -39,10 +68,15 @@ Dropzone.options.dz = {
             d = r.document;
             v = r.validation;
             if (v && v.is_valid == true) {
-                $("#response").html("<p><img style='text-align:center;display:block;margin:auto; max-width:100%' src='{% static 'authentication/images/loose_seal.png' %}'></p><h1 style='color:green'>YES!</h1><p>Document Name: '" + d.name + "'</p><p>SHA512 value of: '" + d.sha512 + "'.</p><p>Signer  fingerprint:  '" + v.fingerprint + "'.</p>");
+                $("#response").html("<h2 style='color:green'><span class='glyphicon glyphicon-ok'></span> File found!</h1>");
+                $("#doc_name").attr("value", d.name);
+                $("#id_sha512").attr("value", d.sha512);
+                $("#fingerprint").attr("value", v.fingerprint);
+                $(".panel.hidden").removeClass('hidden');
             }
             else {
-              $("#response").html("<h1 style='color:red'>NO!</h1>");
+              $("#response").html("<h2 style='color:crimson'><span style='color:crimson' class='glyphicon glyphicon-remove'></span> File does not match any documents</h2>");
+              $(".panel").addClass('hidden');
             }
             this.removeFile(file)
         });

@@ -23,7 +23,7 @@
       <tr id="row{{ user.id }}">
         <td><a href="/admin/auth/user/{{ user.id }}">{{ user.username }}</a></td>
         <td>{{ user.email }}</td>
-        <td>{% if user.is_superuser %}
+        <td>{% if user.is_staff %}
               <span class="glyphicon glyphicon-ok"></span>
             {% else %}
               <span class="glyphicon glyphicon-remove"></span>

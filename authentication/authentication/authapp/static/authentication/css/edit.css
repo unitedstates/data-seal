@@ -10,3 +10,9 @@
 #id_doc_file{
   display: inline;
 }
+#doc_name{
+  cursor: text;
+}
+#fingerprint{
+  cursor: text;
+}
