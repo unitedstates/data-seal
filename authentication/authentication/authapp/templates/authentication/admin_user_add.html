@@ -1,6 +1,6 @@
 {% extends "authentication/_base.html" %}
 {% load static %} <!DOCTYPE html>
-{% block title %}Authentication.io Add File {% endblock %}
+{% block title %}Authentication.io {{ action }} User {% endblock %}
 
 {% block body %}
   
@@ -12,7 +12,7 @@
     {% csrf_token %}
     
     {% block description %} 
-      <h2 class="form-document-heading">Add a user</h2>
+      <h2 class="form-document-heading">{{action}} a user</h2>
     {% endblock %}
     {% for field in form %}
     {% if field.field.required %}
@@ -32,6 +32,7 @@
 <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href="#DocInfo">
 <h4 class="panel-title">
 Additional Information (Optional)
+<b class="caret"></b>
 </h4>
 </div>
 <div id="DocInfo" class="panel-collapse collapse">

@@ -7,7 +7,6 @@
 {% block body %}
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="{% static 'authentication/css/dropzone.css' %}" type="text/css" rel="stylesheet" />
-  <link href="{% static 'authentication/bootstrap-3.1.1-dist/css/bootstrap-theme.min.css' %}" type="text/css" rel="stylesheet" />
   <link href="{{STATIC_URL}}authentication/css/edit.css" rel="stylesheet" />
   <style>
     .row{word-wrap: normal;   
@@ -27,7 +26,7 @@
     </div>
     <div class="panel panel-default hidden">
       <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" href="#FileInfo">
-        <h4 class="panel-title">File Details</h4>
+        <h4 class="panel-title">File Details <b class="caret"></b></h4>
       </div>
       <div id="FileInfo" class="panel-collapse collapse">
         <div class="panel-body" id="details">

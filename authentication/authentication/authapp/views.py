@@ -156,7 +156,8 @@ def admin_user_add(request):
       return HttpResponseRedirect('/admin/auth/user/')
   form = UserForm()
   return render(request, 'authentication/admin_user_add.html', {
-                 'form': form
+                 'form': form,
+                 'action': 'Add'
                })
 
 @staff_member_required
@@ -172,7 +173,8 @@ def admin_user_edit(request, user_id):
       return HttpResponseRedirect('/admin/auth/user/')
   form = UserForm(instance=old_user)
   return render(request, 'authentication/admin_user_add.html', {
-                 'form': form
+                 'form': form,
+                 'action': 'Edit'
                })
       
 @login_required
