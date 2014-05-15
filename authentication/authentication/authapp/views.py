@@ -2,13 +2,14 @@ from django import forms
 from django.shortcuts import get_object_or_404, render
 from authentication.authapp.models import Document
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
 import json
-from django.forms import TextInput, Textarea
 from zipfile import ZipFile, is_zipfile
 import os
-
+from django.forms import TextInput, Textarea, CheckboxInput
 
 def index(request):
     return render(request, 'authentication/index.html')
@@ -30,8 +31,21 @@ class DocumentForm(forms.ModelForm):
     widgets = {
                'name': TextInput(attrs={'class': 'form-control'}),
                'description': Textarea(attrs={'class': 'form-control'}),
-               'license': Textarea(attrs={'class': 'form-control'})
+               'license': Textarea(attrs={'class': 'form-control'}),
               }
+
+class UserForm(forms.ModelForm):
+  is_staff = forms.BooleanField(label="Admin", widget = CheckboxInput(), required=False)
+  class Meta:
+    model = User
+    fields = ['username', 'password', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
+    widgets = {
+               'username': TextInput(attrs={'class': 'form-control'}),
+               'password': TextInput(attrs={'class': 'form-control'}),
+               'first_name': TextInput(attrs={'class': 'form-control'}),
+               'last_name': TextInput(attrs={'class': 'form-control'}),
+               'email': TextInput(attrs={'class': 'form-control'}),
+               }
 
 def upload(request):
     post = False
@@ -47,7 +61,10 @@ def upload(request):
             if documents:
                 document = documents.first()
                 validation = document.test_user_file(request.FILES['user_file'])
-                return HttpResponse(json.dumps({'document': {"name":document.name, "sha512":document.sha512, "uploaded":str(document.uploaded)},'validation': {"is_valid":validation.valid, "fingerprint":validation.fingerprint}}), content_type = "application/json")
+                return HttpResponse(json.dumps({
+                                      'document': {"name":unicode(document), "sha512":document.sha512, "uploaded":str(document.uploaded)},
+                                      'validation': {"is_valid":validation.valid, "fingerprint":validation.fingerprint}}), 
+                                    content_type = "application/json")
             else:
                 return HttpResponse(json.dumps({'document': None,'validation': None}), content_type = "application/json")
     else:
@@ -97,7 +114,8 @@ def file_signature(request, file_slug, file_sha256):
     raise NotImplementedError("TODO")
 
 def admin_login(request):
-  logout(request)
+  if(request.user.is_authenticated()):
+    return HttpResponseRedirect('/admin/authapp/')
   if request.method == 'POST':
     form = LoginForm(request.POST)
     if form.is_valid():
@@ -115,6 +133,48 @@ def admin_login(request):
                  'form': form
                 })
 
+@login_required
+def admin_logout(request):
+  logout(request)
+  return HttpResponseRedirect('/admin/login')
+
+@staff_member_required
+def admin_user(request):
+  users = User.objects.all()
+  return render(request, 'authentication/users.html', {
+                  'users': users
+                })
+
+@staff_member_required
+def admin_user_add(request):
+  if request.method == 'POST':
+    form = UserForm(request.POST)
+    if form.is_valid():
+      new_user = form.save()
+      new_user.set_password(form.cleaned_data['password'])
+      new_user.save()
+      return HttpResponseRedirect('/admin/auth/user/')
+  form = UserForm()
+  return render(request, 'authentication/admin_user_add.html', {
+                 'form': form
+               })
+
+@staff_member_required
+def admin_user_edit(request, user_id):
+  old_user = User.objects.get(id=user_id)
+  if request.method == 'POST':
+    form = UserForm(request.POST, instance=old_user)
+    if form.is_valid():
+      updated_user = form.save()
+      if len(form.cleaned_data['password']) < 30:
+        updated_user.set_password(form.cleaned_data['password'])
+        updated_user.save()
+      return HttpResponseRedirect('/admin/auth/user/')
+  form = UserForm(instance=old_user)
+  return render(request, 'authentication/admin_user_add.html', {
+                 'form': form
+               })
+      
 @login_required
 def admin_document(request):
 

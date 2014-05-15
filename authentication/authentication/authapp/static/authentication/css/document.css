@@ -1,0 +1,11 @@
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #eee;
+}
+.btn-primary.btn-lg{
+  margin-bottom: 10px;
+}
+form.form-inline{
+display: inline;
+}

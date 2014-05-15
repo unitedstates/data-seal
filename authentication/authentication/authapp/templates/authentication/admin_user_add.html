@@ -12,7 +12,7 @@
     {% csrf_token %}
     
     {% block description %} 
-      <h2 class="form-document-heading">Add a file</h2>
+      <h2 class="form-document-heading">Add a user</h2>
     {% endblock %}
     {% for field in form %}
     {% if field.field.required %}
@@ -53,7 +53,6 @@ Additional Information (Optional)
 </div>
 </div>
 
-    {% block hashes %}{% endblock %}
     <button class="btn btn-lg btn-primary" type="submit">
     {% block action %}Submit{% endblock %}
     </button>

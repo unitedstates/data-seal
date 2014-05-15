@@ -5,8 +5,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
   <link href="{% static 'authentication/css/dropzone.css' %}" type="text/css" rel="stylesheet"/>
   <link href="{{ STATIC_URL }}authentication/bootstrap-3.1.1-dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="{{ STATIC_URL }}authentication/bootstrap-3.1.1-dist/css/starter-template.css" rel="stylesheet">
-  <script src="{{ STATIC_URL }}authentication/jquery-1.11.1.min.js"></script>
+  <link href="{{ STATIC_URL }}authentication/css/starter-template.css" rel="stylesheet">
+  <script src="{{ STATIC_URL }}authentication/js/jquery-1.11.1.min.js"></script>
   <script src="{{ STATIC_URL }}authentication/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
 
   <title>{% block title %}Authentication.io{% endblock %}</title>
@@ -23,26 +23,33 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+    {% if user.is_authenticated %}
       <a class="navbar-brand" href="/admin/authapp/">Authentication.io</a>
+    {% else %}
+      <a class="navbar-brand" href="/">Authentication.io</a>
+    {% endif %}
     </div>
     
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="/upload/">Upload</a></li>
+        <li><a href="/upload/">Check File</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="/admin/authapp/document/add/">Add File</a></li>
+        <li><a href="/admin/authapp/document/">View All</a></li>
+        {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
-      {% if user.is_authenticated %}
+      {% if user.is_staff %}
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="caret"></b></a>
           <ul class="dropdown-menu">
-            <li><a href="/admin/password_change">Change Password</a></li>
-            <li><a href="/admin/auth/user">Add User</a></li>
+            <li><a href="/admin/auth/user">Edit Users</a></li>
             <li class="divider"></li>
             <li><a href="/admin/logout/">Log out</a></li>
           </ul>
         </li>
-      {% else %}
-        <li><a href="/admin/login/">Log in</a></li>
+      {% elif user.is_authenticated %}
+        <li><a href="/admin/logout/">Log out</a></li>
       {% endif %}
       </ul>
     </div><!--/.nav-collapse -->
