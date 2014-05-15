@@ -15,7 +15,7 @@
         <th>Name</th>
         <th>Date Added</th>
         <th>Date Updated</th>
-        <th>Delete?</th>
+        <th class="text-center">Delete?</th>
       </tr>
     </thead>
     <tbody>
@@ -24,7 +24,7 @@
         <td><a href="/admin/authapp/document/{{ doc.id }}">{{ doc }}</a></td>
         <td>{{ doc.uploaded }}</td>
         <td>{{ doc.updated }}</td>
-        <td><button class = "btn" data-toggle="modal" data-target="#deleteForm{{ doc.id }}"><span class="glyphicon glyphicon-remove"></span></button></td>
+        <td><button class = "btn center-block" data-toggle="modal" data-target="#deleteForm{{ doc.id }}"><span class="glyphicon glyphicon-remove"></span></button></td>
       </tr>
       {% endfor %}
     </tbody>

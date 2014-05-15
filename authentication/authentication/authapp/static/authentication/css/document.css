@@ -4,37 +4,7 @@ body {
   background-color: #eee;
 }
 .btn-primary.btn-lg{
-  background-color: #333;
-  border-color: #000;
   margin-bottom: 10px;
-}
-.btn-primary.btn-lg:hover{
-  background-color: #555;
-}
-
-thead:first-child tr:first-child th:last-child{
-border-radius: 0 10px 0 0;
-}
-body:last-child tr:last-child td:last-child {
-border-radius: 0 0 10px 0;
-}
-thead:first-child tr:first-child th:first-child{
-border-radius: 10px 0 0 0;
-}
-tbody:last-child tr:last-child td:first-child {
-border-radius: 0 0 0 10px;
-}
-thead{
-  background-color:white;
-}
-table{
-border-radius: 10px;
-}
-.dataTables_wrapper{
-margin-top: 20px;
-}
-.dataTables_wrapper .dataTables_filter input{
-margin-left: 0;
 }
 form.form-inline{
 display: inline;

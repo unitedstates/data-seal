@@ -37,13 +37,3 @@ body {
 .form-document input[type="file"]{
   padding-top: 5px;
 }
-.btn-primary{
-  background-color: #333;
-  border-color: #000;
-}
-.btn-primary:hover{
-  background-color: #555;
-}
-.panel-heading:hover{
-  background-color: #ccc;
-}

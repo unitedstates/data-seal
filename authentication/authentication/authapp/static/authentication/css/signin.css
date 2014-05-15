@@ -38,12 +38,5 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-.btn-primary.btn-lg.btn.btn-block{
-  background-color: #333;
-  border-color: #000;
-}
-.btn-primary.btn-lg.btn.btn-block:hover{
-  background-color: #555;
-}
 
 

@@ -5,3 +5,57 @@ body {
   padding: 40px 15px;
   text-align: center;
 }
+
+/* Cursors for readonly input*/
+#id_sha256{
+  cursor: text;
+}
+#id_sha512{
+  cursor: text;
+}
+#id_gpgsig{
+  cursor: text;
+}
+#id_doc_file{
+  display: inline;
+}
+#doc_name{
+  cursor: text;
+}
+#fingerprint{
+  cursor: text;
+}
+.btn-primary{
+  background-color: #333;
+  border-color: #000;
+}
+.btn-primary:hover{
+  background-color: #555;
+}
+.panel-heading:hover{
+  background-color: #ccc;
+}
+thead:first-child tr:first-child th:last-child{
+border-radius: 0 10px 0 0;
+}
+body:last-child tr:last-child td:last-child {
+border-radius: 0 0 10px 0;
+}
+thead:first-child tr:first-child th:first-child{
+border-radius: 10px 0 0 0;
+}
+tbody:last-child tr:last-child td:first-child {
+border-radius: 0 0 0 10px;
+}
+thead{
+  background-color:white;
+}
+table{
+border-radius: 10px;
+}
+.dataTables_wrapper{
+margin-top: 20px;
+}
+.dataTables_wrapper .dataTables_filter input{
+margin-left: 0;
+}
