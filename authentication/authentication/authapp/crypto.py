@@ -1,10 +1,43 @@
 from django.conf import settings
 import gnupg
 import os
+import subprocess
 
+
+def gpg_bin():
+    """
+    If there is a `GNUPG_BINARY` setting, tries to use that as the
+    path to the `gpg` or `gpg2` executable. If not, ask the system
+    where it is and try to dereference symlinks along the way.
+    """
+    gpgbin = getattr(settings, "GNUPG_BINARY", None)
+    try:
+        if not gpgbin:
+            gpgbin = subprocess.Popen(
+                ['which', 'gpg2'],
+                stdout=subprocess.PIPE
+            ).stdout.read().strip("\n")
+        if not gpgbin:
+            gpgbin = subprocess.Popen(
+                ['which', 'gpg'],
+                stdout=subprocess.PIPE
+            ).stdout.read().strip("\n")
+    except OSError:
+        # Don't have "which" command, so can't ask the OS for the path
+        # to the gpg or gpg2 binary
+        pass
+
+    if gpgbin:
+        # dereference symlinks, since `python-gnupg` can't cope with 'em.
+        gpgbin = os.path.realpath(gpgbin)
+
+    if not gpgbin:
+        raise Exception("Could not find the `gpg` or `gpg2` executable. Please set GNUPG_BINARY in your local_settings.py file.")
+
+    return gpgbin
 
 def get_gpg(setup_mode=False):
-    gpgbin = getattr(settings, "GNUPG_BINARY", None)
+    gpgbin = gpg_bin()
     gpgdir = os.path.join(settings.BASE_DIR, 'gpgdata')
 
     pubring = os.path.join(gpgdir, "pubring.gpg")

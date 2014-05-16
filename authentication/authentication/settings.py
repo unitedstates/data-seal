@@ -92,10 +92,8 @@ LOGIN_URL = '/admin/login/'
 ############################################################
 # Default settings for Authentication
 
-# TODO: make this smarter. (due to bug, this cannot be a symlink.)
-GNUPG_BINARY = "/usr/local/bin/gpg"
-
-GNUPG_PASSPHRASE = SECRET_KEY
+GNUPG_BINARY = None
+GNUPG_PASSPHRASE = None
 GNUPG_IDENTITY_DEFAULTS = {
     'name_real': 'Authentication Default Config',
     'name_email': 'authentication@localhost',
