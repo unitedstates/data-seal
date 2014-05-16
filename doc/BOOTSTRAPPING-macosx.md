@@ -98,15 +98,19 @@ pip install -r requirements.txt
 
 ---
 
-Now you’ll want to configure the server. `cd` to the `authentication` folder.
+Now you’ll want to configure the server. `cd` to the `authentication` folder
+and then copy `local_settings.py.example` to `local_settings.py`:
 
-Inside this `authentication` folder, copy `local_settings.py.example` to
-`local_settings.py`. Then edit `local_settings.py`.
+```shell
+cd authentication
+cp local_settings.py.example local_settings.py
+```
+
+Then edit `local_settings.py`.
 
 * Make `SECRET_KEY` and `GNUPG_PASSPHRASE` strings that are somewhat
   random. Use your favorite password generator or just bang on the
   keyboard a bit.
-* Uncomment `GNUPG_BINARY` and set it to `"/usr/local/opt/gnupg2/bin/gpg2"`
 
 Now run the following command:
 
@@ -115,7 +119,8 @@ python manage.py gpginit
 ```
 
 It will take a while, but you will now get a value for `GNUPG_IDENTITY`
-which you should throw into your `local_settings.py`.
+which you should throw into your `local_settings.py` (you’ll see the section
+for it at the bottom.
 
 ---
 
