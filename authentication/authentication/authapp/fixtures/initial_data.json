@@ -9,7 +9,6 @@
     "gpgsig": "",
     "sha256": "",
     "sha512": "",
-    "slug": "a-test-file",
     "name": "A Test File"
   },
   "model": "authapp.document",
