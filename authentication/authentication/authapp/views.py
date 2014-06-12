@@ -1,15 +1,21 @@
+import json
+import os
+from zipfile import ZipFile, is_zipfile
+from tempfile import mkdtemp
+from shutil import rmtree
 from django import forms
-from django.shortcuts import get_object_or_404, render
-from authentication.authapp.models import Document
+from django.conf import settings
+from django.contrib import messages
+from django.core.files import File
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, HttpResponse
-import json
-from zipfile import ZipFile, is_zipfile
-import os
 from django.forms import TextInput, Textarea, CheckboxInput
+from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseRedirect, HttpResponse
+
+from authentication.authapp.models import Document
 
 def index(request):
     return render(request, 'authentication/index.html')
@@ -195,25 +201,46 @@ def admin_document(request):
 def admin_authapp(request):
   return render(request, 'authentication/admin_authapp.html')
 
-def handleZipFile(input_file, path):
+def handleZipFile(input_file, subpath):
+  # keep track of # of inner files we have (so we can report this
+  # back to the user later)
+  num_files = 0
+
+  # we'll unzip the zip file to a temporary directory and *then*
+  # pass the files into Django.
+  tempdir = mkdtemp()
+
   #Extract all files from zip
   z = ZipFile(input_file)
-  z.extractall(path)
+  z.extractall(tempdir)
 
-  #Make Document for all files, ignoring directories, making sure to use full path
   for name in z.namelist():
-    full_name = os.path.join(path, name)
-    if name.startswith('__MACOSX/'):
-      continue
-    if os.path.isdir(full_name):
-      continue
-    new_doc = Document(doc_file=full_name)
-    new_doc.save()
+    # the full path to file, inside temp directory.
+    file_loc = os.path.join(tempdir, name)
 
-    #If we run into another zip file, unzip that one too
-    if is_zipfile(full_name):
-      new_path = os.path.dirname(new_doc.doc_file.url)
-      handleZipFile(new_doc.doc_file, new_path)
+    # skip if we don't want it in our db
+    if name.startswith('__MACOSX/') or os.path.isdir(file_loc):
+      continue
+
+    # now create a Document and send this file into Django's
+    # magic file handling.
+    # "/document/2014/06/<filename>"
+    save_name = os.path.join(subpath, name)
+    new_doc = Document()
+    with open(file_loc, 'rb') as f:
+      new_doc.doc_file.save(save_name, File(f))
+    new_doc.save()
+    num_files += 1
+
+    #If this file was another zip file, unzip it too.
+    if is_zipfile(file_loc):
+      new_subpath = os.path.dirname(new_doc.doc_file.url)
+      num_files += handleZipFile(file_loc, new_subpath)
+
+  # Clear temp
+  rmtree(tempdir)
+
+  return num_files
 
 @login_required
 def add(request):
@@ -223,8 +250,10 @@ def add(request):
       new_doc = form.save()
       #Handle zip files
       if is_zipfile(request.FILES['doc_file']):
-         path = os.path.dirname(new_doc.doc_file.url)
-         handleZipFile(request.FILES['doc_file'], path)
+        url_subpath = os.path.dirname(new_doc.doc_file.url)
+        num_inner_files = handleZipFile(request.FILES['doc_file'], url_subpath)
+        if num_inner_files > 0:
+          messages.add_message(request, messages.INFO, "Note: %d files inside the zip file were also saved as separate documents." % num_inner_files)
 
       return HttpResponseRedirect('/admin/authapp/document/'+str(new_doc.id))
   
