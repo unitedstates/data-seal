@@ -1,0 +1,63 @@
+{% extends "authentication/_base.html" %}
+{% load static %}
+
+{% block body %}
+  <link href="{{ STATIC_URL }}authentication/DataTables-1.10.0/media/css/jquery.dataTables.css" rel="stylesheet">
+  <script src="{{ STATIC_URL }}authentication/DataTables-1.10.0/media/js/jquery.dataTables.min.js"></script>
+  <link href="{{ STATIC_URL }}authentication/css/document.css" rel="stylesheet">
+
+  <h1> Check the Hash Sums for Documents </h1>
+  <table name="documents" id="documents">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Date Added</th>
+        <th>Date Updated</th>
+        <th>SHA256</th>
+<!-- TO ADD:
+        <th>SHA512</th> 
+-->
+      </tr>
+    </thead>
+    <tbody>
+      {% for doc in documents %}
+      <tr id="row{{ doc.sha256 }}">
+<!--        <td><a href="/document/{{ doc.id }}">{{ doc }}</a></td> -->
+        <td>{{ doc }}</td>
+        <td>{{ doc.uploaded }}</td>
+        <td>{{ doc.updated }}</td>
+        <td>{{ doc.sha256 }}</td>
+<!-- TO ADD:
+        <td>{{ doc.sha512 }}</td> 
+-->
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<script>
+  $(document).ready(function() {
+    oTable = $('#documents').dataTable( {
+        "oLanguage": { "sSearch": ""}
+    });
+    $('div.dataTables_filter input').addClass('form-control').attr("placeholder", "Search");
+
+    $('.form').submit(function(event) {
+        event.preventDefault();
+        doc_id = $(this).attr('name')
+        $.ajax({
+          url: "/admin/authapp/document/",
+          type: "POST",
+          data: $(this).serialize(),
+          success: function(data) {
+            $('#deleteForm'+doc_id).modal('hide');
+            oTable.fnDeleteRow($('#row'+doc_id));
+          }
+        });
+    });
+
+  } );
+</script>
+
+{% endblock %}
+
