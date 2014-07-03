@@ -22,6 +22,11 @@ def index(request):
 
 ##########
 
+def documents(request):
+    return render(request, 'authentication/documents.html', {"documents":Document.objects.all().order_by('doc_file')})
+
+##########
+
 
 class UploadForm(forms.Form):
     user_file = forms.FileField(label="File you want to check")
@@ -94,13 +99,11 @@ def search(request):
 
 ##########
 
-
-def file_detail(request, file_slug, file_sha256):
-    print "%s: %s" % (file_slug, file_sha256)
-    document = get_object_or_404(Document, slug=file_slug, sha256=file_sha256)
+def file_detail(request, doc_id, file_sha256):
+    print "%s: %s" % (doc_id, file_sha256)
+    document = get_object_or_404(Document, doc_id=doc_id, sha256=file_sha256)
     print document
     raise NotImplementedError("TODO")
-
 
 ##########
 
