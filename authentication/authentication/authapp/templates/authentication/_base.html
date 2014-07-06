@@ -9,7 +9,7 @@
   <script src="{{ STATIC_URL }}authentication/js/jquery-1.11.1.min.js"></script>
   <script src="{{ STATIC_URL }}authentication/bootstrap-3.1.1-dist/js/bootstrap.min.js"></script>
 
-  <title>{% block title %}Authentication.io{% endblock %}</title>
+  <title>{% block title %}DC Council Data Seal{% endblock %}</title>
 </head>
 
 <body>
@@ -24,9 +24,9 @@
         <span class="icon-bar"></span>
       </button>
     {% if user.is_authenticated %}
-      <a class="navbar-brand" href="/admin/authapp/">Authentication.io</a>
+      <a class="navbar-brand" href="/admin/authapp/">DC Council Data Seal</a>
     {% else %}
-      <a class="navbar-brand" href="/">Authentication.io</a>
+      <a class="navbar-brand" href="/">DC Council Data Seal</a>
     {% endif %}
     </div>
     
