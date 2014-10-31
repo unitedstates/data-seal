@@ -16,6 +16,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 
 from authentication.authapp.models import Document
+from authentication.authapp.archive import export_to_ia
 
 def index(request):
     return render(request, 'authentication/index.html')
@@ -233,6 +234,7 @@ def handleZipFile(input_file, subpath):
     with open(file_loc, 'rb') as f:
       new_doc.doc_file.save(save_name, File(f))
     new_doc.save()
+    export_to_ia(new_doc)
     num_files += 1
 
     #If this file was another zip file, unzip it too.
@@ -251,6 +253,7 @@ def add(request):
     form = DocumentForm(request.POST, request.FILES)
     if form.is_valid():
       new_doc = form.save()
+      export_to_ia(new_doc)
       #Handle zip files
       if is_zipfile(request.FILES['doc_file']):
         url_subpath = os.path.dirname(new_doc.doc_file.url)
