@@ -1,4 +1,4 @@
-# Authentication
+# Data Seal
 
 A lightweight data authentication service, designed for state compliance with the Uniform Electronic Legal Material Act (UELMA), but useful for much more. Project name to come.
 
