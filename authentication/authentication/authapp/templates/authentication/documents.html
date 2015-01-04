@@ -23,7 +23,7 @@
       {% for doc in documents %}
       <tr id="row{{ doc.sha256 }}">
 <!--        <td><a href="/document/{{ doc.id }}">{{ doc }}</a></td> -->
-        <td>{{ doc }}</td>
+        <td><a href="{{doc.get_ia_url}}">{{ doc }}</a></td>
         <td>{{ doc.uploaded }}</td>
         <td>{{ doc.updated }}</td>
         <td>{{ doc.sha256 }}</td>
