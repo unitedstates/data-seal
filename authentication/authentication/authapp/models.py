@@ -31,6 +31,13 @@ class Document(models.Model):
       else:
         return self.doc_file.url.split('/')[-1]
 
+    def get_ia_url(self):
+        url = "https://archive.org/download/"
+        url += settings.IA_ITEM + '/'
+        url += self.sha256
+        url += os.path.splitext(self.doc_file.name)[1]
+        return url
+
     @classmethod
     def sign_this_file(cls, sender, instance, created, **kwargs):
         """
