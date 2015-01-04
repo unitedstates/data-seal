@@ -16,7 +16,6 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, HttpResponse
 
 from authentication.authapp.models import Document
-from authentication.authapp.archive import export_to_ia
 
 def index(request):
     return render(request, 'authentication/index.html')
@@ -230,39 +229,43 @@ def handleZipFile(input_file, subpath):
     # magic file handling.
     # "/document/2014/06/<filename>"
     save_name = os.path.join(subpath, name)
-    new_doc = Document()
-    with open(file_loc, 'rb') as f:
-      new_doc.doc_file.save(save_name, File(f))
-    new_doc.save()
-    export_to_ia(new_doc)
-    num_files += 1
 
-    #If this file was another zip file, unzip it too.
-    if is_zipfile(file_loc):
-      new_subpath = os.path.dirname(new_doc.doc_file.url)
-      num_files += handleZipFile(file_loc, new_subpath)
+    if Document.find_user_file(file_loc).first() == None:
+
+      new_doc = Document()
+      with open(file_loc, 'rb') as f:
+        new_doc.doc_file.save(save_name, File(f))
+      new_doc.save()
+      num_files += 1
+
+      #If this file was another zip file, unzip it too.
+      if is_zipfile(file_loc):
+        new_subpath = os.path.dirname(new_doc.doc_file.url)
+        num_files += handleZipFile(file_loc, new_subpath)
 
   # Clear temp
   rmtree(tempdir)
 
   return num_files
 
+
 @login_required
 def add(request):
   if request.method == 'POST':
     form = DocumentForm(request.POST, request.FILES)
     if form.is_valid():
-      new_doc = form.save()
-      export_to_ia(new_doc)
-      #Handle zip files
-      if is_zipfile(request.FILES['doc_file']):
-        url_subpath = os.path.dirname(new_doc.doc_file.url)
-        num_inner_files = handleZipFile(request.FILES['doc_file'], url_subpath)
-        if num_inner_files > 0:
-          messages.add_message(request, messages.INFO, "Note: %d files inside the zip file were also saved as separate documents." % num_inner_files)
-
-      return HttpResponseRedirect('/admin/authapp/document/'+str(new_doc.id))
-  
+      # Check to see if the file is already in the system
+      if Document.find_user_file(request.FILES['doc_file']).first() == None:
+        new_doc = form.save()
+        #Handle zip files
+        if is_zipfile(request.FILES['doc_file']):
+          url_subpath = os.path.dirname(new_doc.doc_file.url)
+          num_inner_files = handleZipFile(request.FILES['doc_file'], url_subpath)
+          if num_inner_files > 0:
+            messages.add_message(request, messages.INFO, "Note: %d files inside the zip file were also saved as separate documents." % num_inner_files)
+        return HttpResponseRedirect('/admin/authapp/document/'+str(new_doc.id))
+      else:
+        messages.add_message(request, messages.INFO, "Note: This document is already in the system")
   form = DocumentForm()
   return render(request, 'authentication/add.html', {
                  'form': form

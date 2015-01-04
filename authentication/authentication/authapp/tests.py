@@ -2,7 +2,9 @@ from django.test import TestCase
 from authentication.authapp.models import Document
 import subprocess
 import unittest
-
+import internetarchive as ia
+from django.conf import settings
+import os
 
 def have_shasum():
     try:
@@ -50,3 +52,10 @@ class DocumentCryptoTestCase(TestCase):
             doc.sha512,
             "SHA512 hash generation matches output of `shasum -a512`."
         )
+
+    def test_export_to_ia(self):
+        doc = Document.objects.get(id=1)
+        item = ia.Item(settings.IA_ITEM)
+        fname = doc.sha256 + os.path.splitext(doc.doc_file.name)[1]
+        i = item.get_file(fname)
+        self.assertNotEqual(i, None, "The file is uploaded to the internetarchive")

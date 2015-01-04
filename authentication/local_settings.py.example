@@ -20,11 +20,18 @@ TEMPLATE_DEBUG = True
 
 # Change database specific to this machine. DO NOT use sqlite3
 # in production.
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    }
+#}
+
+# Set up for PostgreSQL
+import dj_database_url
+DATABASE_URL = "postgres://USER:PASSWORD@HOST:PORT/NAME"
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    "default": dj_database_url.config(default=DATABASE_URL)
 }
 
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
