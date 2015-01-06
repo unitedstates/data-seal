@@ -85,6 +85,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 # https://docs.djangoproject.com/en/1.7/howto/static-files/deployment/
 STATIC_URL = '/static/'
+STATIC_ROOT = 'staticfiles'
 
 # Media files (user uploads)
 MEDIA_URL = '/documents/'
