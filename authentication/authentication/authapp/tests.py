@@ -27,6 +27,9 @@ def shasum(filename, mode=256):
 
 
 class DocumentCryptoTestCase(TestCase):
+
+    fixtures = ['initial_data.json']
+
     def test_gpg(self):
         """GPG signature for file validates against itself."""
         doc = Document.objects.get(id=1)

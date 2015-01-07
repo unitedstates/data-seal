@@ -19,3 +19,7 @@ cp local_settings.py.example local_settings.py
 echo '"GNUPG_BINARY = "/usr/local/opt/gnupg2/bin/gpg2"  # for *nix"' >> local_settings.py
 ./manage.py gpginit
 ./manage.py make_secret_key >> local_settings.py 
+./manage syncdb
+# Will get prompted to make a superuser
+./conf/nginx/boostrap.sh
+gunicorn authentication.wsgi:application -b 0.0.0.0:5000 --log-file /var/log/gunicorn.log --pid /tmp/gunicorn.pid --daemon
