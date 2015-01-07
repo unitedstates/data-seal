@@ -230,7 +230,7 @@ def handleZipFile(input_file, subpath):
     # "/document/2014/06/<filename>"
     save_name = os.path.join(subpath, name)
 
-    if Document.find_user_file(file_loc).first() == None:
+    if Document.find_user_file(open(file_loc, 'r')).first() == None:
 
       new_doc = Document()
       with open(file_loc, 'rb') as f:

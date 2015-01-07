@@ -8,7 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', 'authentication.authapp.views.index', name='index'),
     url(r'^upload/$', 'authentication.authapp.views.upload', name='upload'),
-    url(r'^documents/$', 'authentication.authapp.views.documents', name='documents'),
+    url(r'^view/$', 'authentication.authapp.views.documents', name='documents'),
     url(r'^search/$', 'authentication.authapp.views.search', name='search'),
     url(r'^document/(?P<file_sha256>[0-9a-f]{64})/$', 'authentication.authapp.views.file_detail', name='file_detail'),
     url(r'^document/(?P<file_sha256>[0-9a-f]{64})/download/$', 'authentication.authapp.views.file_download', name='file_download'),
