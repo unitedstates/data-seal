@@ -19,6 +19,7 @@
 <h3>How to use the service</h3>
 <p>The easiest way to use the service is to <a href="/upload">upload any file to the service</a> and check whether the file is recognized by the system.</p>
 <p>An alternative way, which does not require any additional transmission of data over the internet, is to compute the SHA256 hash value for a particular document and to <a href="/view">check the list of hash values in the system</a>.
+<p>Finally, here is the <a href="{{ STATIC_URL }}authentication/pubkey.asc">Public Key.</a> You can use it with the PGP Signature associated with the file to verify the authenticity of a downloaded file.</p>
 <h3>Thank you</h3>
 <p>Thanks for using the DataSeal Authentication Service. If you have any questions, please email Dave Zvenyach at <a href="mailto:vzvenyach@dccouncil.us">vzvenyach@dccouncil.us</a>. If you would like to review the source code or additional documentation for the Service, please visit <a href="https://github.com/unitedstates/authentication">the software's public repository</a>.</p>
 {% endblock %}
