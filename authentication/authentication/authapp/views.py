@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.forms import TextInput, Textarea, CheckboxInput
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 
 from authentication.authapp.models import Document
 
@@ -116,11 +116,12 @@ def file_download(request, file_slug, file_sha256):
 
 ##########
 
-
-def file_signature(request, file_slug, file_sha256):
-    document = get_object_or_404(Document, slug=file_slug, sha256=file_sha256)
-    print document
-    raise NotImplementedError("TODO")
+def file_signature(request, file_sha256, file_name):
+    document = get_object_or_404(Document, sha256=file_sha256)
+    if os.path.basename(document.doc_file.name) == file_name:
+      return HttpResponse(document.gpgsig, content_type='text/plain')
+    else:
+      raise Http404
 
 def admin_login(request):
   if(request.user.is_authenticated()):
