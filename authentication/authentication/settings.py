@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_yubico',
     'authentication.authapp',
 )
 
@@ -52,6 +53,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'django_yubico.backends.YubicoBackend',
+    'django_yubico.backends.YubicoBackendRequireYubikey',
 )
 
 ROOT_URLCONF = 'authentication.urls'
@@ -92,6 +98,7 @@ MEDIA_URL = '/documents/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'server_documents')
 
 LOGIN_URL = '/admin/login/'
+LOGIN_REDIRECT_URL='/'
 
 ############################################################
 # Default settings for Authentication

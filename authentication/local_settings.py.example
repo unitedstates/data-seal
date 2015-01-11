@@ -12,11 +12,11 @@ BASE_DIR = os.path.dirname(__file__)
 ######################################################################
 
 # https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/#secret-key
-SECRET_KEY = 'CHANGEME'
+# SECRET_KEY = 'CHANGEME'
 
 # Change to False in production
-DEBUG = True
-TEMPLATE_DEBUG = True
+# DEBUG = True
+# TEMPLATE_DEBUG = True
 
 # Change database specific to this machine. DO NOT use sqlite3
 # in production.
@@ -29,10 +29,10 @@ TEMPLATE_DEBUG = True
 
 # Set up for PostgreSQL
 import dj_database_url
-DATABASE_URL = "postgres://USER:PASSWORD@HOST:PORT/NAME"
-DATABASES = {
-    "default": dj_database_url.config(default=DATABASE_URL)
-}
+# DATABASE_URL = "postgres://USER:PASSWORD@HOST:PORT/NAME"
+# DATABASES = {
+#    "default": dj_database_url.config(default=DATABASE_URL)
+#}
 
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 STATIC_URL = '/static/'
@@ -49,25 +49,25 @@ STATIC_URL = '/static/'
 # Set this the way you would set SECRET_KEY (but use a different value).
 # Note: if you ever update this, you will need to generate a new
 # GNUPG_IDENTITY.
-GNUPG_PASSPHRASE = 'CHANGEME'
+# GNUPG_PASSPHRASE = 'CHANGEME'
 
 # On initial setup, this will be used to populate the name & other info
 # for the server's default authentication key.
-GNUPG_IDENTITY_DEFAULTS = {
+# GNUPG_IDENTITY_DEFAULTS = {
 
     # This is displayed on the key; make it something that identifies this website.
-    'name_real': 'Authentication.io',
+#    'name_real': 'Authentication.io',
 
     # Make this a real address that will never change. ("support@example.com", etc)
-    'name_email': 'test@example.com',
+#    'name_email': 'test@example.com',
 
     # Don't edit this (it is set as GNUPG_PASSPHRASE, above).
-    'passphrase': GNUPG_PASSPHRASE
-}
+#    'passphrase': GNUPG_PASSPHRASE
+#}
 
 # After initial setup (the script will tell you how to update this), this
 # line change from None to the long GPG key identifier.
-GNUPG_IDENTITY = None
+# GNUPG_IDENTITY = None
 
 # This is for the Internet Archive
 IA_ITEM = "DOCUMENT COLLECTION"

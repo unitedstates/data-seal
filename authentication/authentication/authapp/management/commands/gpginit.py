@@ -30,10 +30,10 @@ class Command(NoArgsCommand):
         key_input = gpg.gen_key_input(**gpgkey_settings)
         key = gpg.gen_key(key_input)
 
-        print "Authentication key generated. Please edit your local_settings.py file"
-        print "and change the `GNUPG_IDENTITY` setting from `None` to:"
-        print
+        # print "Authentication key generated. Please edit your local_settings.py file"
+        # print "and change the `GNUPG_IDENTITY` setting from `None` to:"
+        # print
         print 'GNUPG_IDENTITY = "%s"' % str(key)
-        print
-        print "(If you don't have a local_settings.py file, copy local_settings_example.py"
-        print "to local_settings.py and then do the edit there.)"
+        # print
+        # print "(If you don't have a local_settings.py file, copy local_settings_example.py"
+        # print "to local_settings.py and then do the edit there.)"

@@ -1,21 +1,6 @@
-#!/bin/bash
-# This is a script to automatically load the nginx configuration
-
-add-apt-repository ppa:nginx/stable
-apt-get update
-apt-get -y install nginx
-cp local.conf /etc/nginx/conf.d/local.conf
-mkdir /etc/nginx/ssl
-cp ssl.rules /etc/nginx/ssl/ssl.rules
-cp nginx.conf /etc/nginx/nginx.conf
-
-IP_ADDRESS="$(ifconfig | egrep -o -m 1 'inet addr:[0-9|.]+' | egrep -o '[0-9|.]+')"
-
-echo "Your server name, please?"
-read SERVER_NAME
-
 # Generate the Keys
-openssl genrsa -aes256 -out /etc/nginx/ssl/keys/private.key 2048
+# openssl genrsa -aes256 -out /etc/nginx/ssl/keys/private.key 2048
+openssl genpkey -algorithm RSA -aes256 -out /etc/nginx/ssl/keys/private.key -pkeyopt rsa_keygen_bits:2048
 # Note, this will ask you for your password twice.
 
 openssl rsa -in /etc/nginx/ssl/keys/private.key -out /etc/nginx/ssl/keys/private-decrypted.key
@@ -44,6 +29,3 @@ openssl dhparam -outform pem -out /etc/nginx/ssl/dhparam2048.pem 2048
 # Do some cleanup. Only leave the crt and the encrypted private key
 rm /etc/nginx/ssl/keys/private-decrypted.key
 rm /etc/nginx/ssl/keys/$SERVER_NAME.csr
-
-sed -i "s/SERVER_NAME/$SERVER_NAME" /etc/nginx/conf.d/local.conf
-sed -i "s/SSL_ROOT/$SSL_ROOT" /etc/nginx/ssl/ssl.rules

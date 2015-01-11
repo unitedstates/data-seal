@@ -15,7 +15,7 @@
 
 <body>
   <div class="container">
-  <form class="form-signin" role="form" method="post" enctype="multipart/form-data">
+<!--   <form class="form-signin" role="form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     
     <h2 class="form-signin-heading">Please sign in</h2>
@@ -37,6 +37,14 @@
     
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
   </form>
+ -->
+
+<div id="yubikey_login">
+<form action="" method="post" onkeypress="return event.keyCode != 13" id="yubico_form">{% csrf_token %}
+{{ form.as_p }}
+<p><input type="submit" id="yubikey_login_button" value="Log in" /></p>
+</form>
+</div>
 
   </div> <!-- /container -->
 </body>
