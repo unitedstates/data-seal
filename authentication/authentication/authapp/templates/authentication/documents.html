@@ -14,6 +14,7 @@
         <th>Date Added</th>
         <th>Date Updated</th>
         <th>SHA256</th>
+        <th>Download .sig</th>
 <!-- TO ADD:
         <th>SHA512</th> 
 -->
@@ -23,10 +24,11 @@
       {% for doc in documents %}
       <tr id="row{{ doc.sha256 }}">
 <!--        <td><a href="/document/{{ doc.id }}">{{ doc }}</a></td> -->
-        <td>{{ doc }}</td>
+        <td><a href="{{doc.get_ia_url}}">{{ doc }}</a></td>
         <td>{{ doc.uploaded }}</td>
         <td>{{ doc.updated }}</td>
         <td>{{ doc.sha256 }}</td>
+        <td><a href="{{ doc.get_sig_url }}">Signature</a></td>
 <!-- TO ADD:
         <td>{{ doc.sha512 }}</td> 
 -->

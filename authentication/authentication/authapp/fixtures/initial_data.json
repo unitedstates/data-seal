@@ -5,7 +5,7 @@
     "updated": "2014-05-05T02:48:24.220Z",
     "description": "A small, random photograph file.",
     "license": "via http://placekitten.com/\r\nhttp://placekitten.com/attribution.html",
-    "doc_file": "server_documents/test.jpg",
+    "doc_file": "test.jpg",
     "gpgsig": "",
     "sha256": "",
     "sha512": "",

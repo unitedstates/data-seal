@@ -4,7 +4,8 @@ from tempfile import NamedTemporaryFile
 from datetime import datetime
 import hashlib
 import os
-
+import internetarchive
+from django.conf import settings
 
 # Create your models here.
 class Document(models.Model):
@@ -30,6 +31,16 @@ class Document(models.Model):
       else:
         return self.doc_file.url.split('/')[-1]
 
+    def get_sig_url(self):
+      return '/document/' + self.sha256 + '/' + os.path.basename(self.doc_file.name) + '.sig'
+
+    def get_ia_url(self):
+        url = "https://archive.org/download/"
+        url += settings.IA_ITEM + '/'
+        url += self.sha256
+        url += os.path.splitext(self.doc_file.name)[1]
+        return url
+
     @classmethod
     def sign_this_file(cls, sender, instance, created, **kwargs):
         """
@@ -54,13 +65,26 @@ class Document(models.Model):
         sha256 = hashlib.sha256()
         for chunk in iter(lambda: instance.doc_file.file.read(sha256.block_size), b''):
             sha256.update(chunk)
-        Document.objects.filter(id=instance.id).update(sha256=sha256.hexdigest())
+        sha_value = sha256.hexdigest()
+        Document.objects.filter(id=instance.id).update(sha256=sha_value)
 
         instance.doc_file.file.seek(0)
         sha512 = hashlib.sha512()
         for chunk in iter(lambda: instance.doc_file.file.read(sha512.block_size), b''):
             sha512.update(chunk)
         Document.objects.filter(id=instance.id).update(sha512=sha512.hexdigest())
+        Document.export_to_ia(instance, sha_value)
+
+    def export_to_ia(self, sha_value, **kwargs):
+        """
+        Called after a `Document` is signed and the hashes are calculated. Takes the
+        file in `Document.doc_file` and uploads it to the internetarchive with the sha256 value as the
+        filename.
+        """
+        item = internetarchive.Item(settings.IA_ITEM)
+        md = dict(creator=settings.IA_CREATOR)
+        key = sha_value + os.path.splitext(self.doc_file.name)[1]
+        item.upload_file(self.doc_file, key=key, metadata=md, access_key=settings.IA_ACCESS_KEY, secret_key=settings.IA_SECRET_KEY)
 
     def test_user_file(self, uploaded_fp):
         """

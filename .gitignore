@@ -61,3 +61,4 @@ authentication/server_documents/2*
 authentication/local_settings.py
 *.swp
 
+*.asc

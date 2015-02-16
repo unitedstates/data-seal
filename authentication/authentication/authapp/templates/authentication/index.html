@@ -2,6 +2,24 @@
 {% load static %}
 
 {% block body %}
-<p>test</p>
-<img src="{% static "authentication/placekitten.jpg" %}"/>
+<h2>Welcome to the DC Council DataSeal Authentication Service</h2>
+<h3>About the Service</h3>
+<p>Pursuant to the <a href=" http://lims.dccouncil.us/Legislation/B20-0221" target="blank">Uniform Electronic Legal Material Act</a>, the Council of the District of Columbia will be required to authenticate certain primary legal materials. Specifically, the Council will be required to authenticate:</p>
+<ol>
+<li>The acts and resolutions of the Council</li>
+<li>The Statutes at Large</li>
+<li>The District of Columbia Official Code</li>
+</ol>
+<p>To comply with this authentication requirement, the Council has partnered with US Open Data to create an open-source, cost-effective data-authentication service. This service uses three methods to ensure that each document included in the service has not been altered in any way after it is published:
+<ol>
+<li><b>HTTPS.</b> A secure method ensuring that transmission of website data requested by a user has not been changed.</li>
+<li><b>SHA Hash Values.</b> Using two cryptographic algorithms (SHA-256 and SHA-512), a unique value calculated based on the contents of a particular file. If the file has been altered in any way, the computed value will be different.</li>
+<li><b>Digital Signature.</b> Using the OpenPGP standard, a method of "signing" a document to ensure that the document was actually sent by the signer.</li>  
+</ol>
+<h3>How to use the service</h3>
+<p>The easiest way to use the service is to <a href="/upload">upload any file to the service</a> and check whether the file is recognized by the system.</p>
+<p>An alternative way, which does not require any additional transmission of data over the internet, is to compute the SHA256 hash value for a particular document and to <a href="/view">check the list of hash values in the system</a>.
+<p>Finally, here is the <a href="{{ STATIC_URL }}authentication/pubkey.asc">Public Key.</a> You can use it with the PGP Signature associated with the file to verify the authenticity of a downloaded file.</p>
+<h3>Thank you</h3>
+<p>Thanks for using the DataSeal Authentication Service. If you have any questions, please email Dave Zvenyach at <a href="mailto:vzvenyach@dccouncil.us">vzvenyach@dccouncil.us</a>. If you would like to review the source code or additional documentation for the Service, please visit <a href="https://github.com/unitedstates/authentication">the software's public repository</a>.</p>
 {% endblock %}
