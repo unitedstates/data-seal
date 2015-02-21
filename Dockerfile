@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y gnupg2 \
 	libxml2-dev libxslt1-dev \
 	libncurses5-dev
 
-RUN git clone https://github.com/unitedstates/authentication.git
+RUN git clone https://github.com/unitedstates/authentication.git authentication
 WORKDIR authentication
 
 RUN pip install -r requirements.txt
@@ -28,15 +28,14 @@ RUN mv authentication/local_settings.py.example authentication/local_settings.py
 RUN printf '\nGNUPG_BINARY = "/usr/local/opt/gnupg2/bin/gpg2"  # for *nix"\n' >> authentication/local_settings.py
 RUN ./authentication/manage.py make_secret_key >> authentication/local_settings.py
 
-ENV FQDN=authentication.dccode.gov
-ENV EMAIL_ADDRESS=administrator@dccode.gov
+ENV FQDN authentication.dccode.gov
+ENV EMAIL_ADDRESS administrator@dccode.gov
 
 RUN printf "$FQDN\n$EMAIL_ADDRESS" | ./conf/nginx/gpg.sh >> authentication/local_settings.py
-RUN ./authentication/manage.py gpginit >> authentication/local_settings.py
-RUN gpg --armor --homedir authentication/gpgdata --export $EMAIL_ADDRESS > authentication/gpgdata/pubkey.asc
-RUN ln -s gpgdata/pubkey.asc authentication/authentication/authapp/static/pubkey.asc 
+
+RUN ./gpg_init.sh
 
 # RUN ./authentication/manage.py syncdb
-# RUN gunicorn authentication.wsgi:application -b 0.0.0.0:5000 --log-file /var/log/gunicorn.log
+# RUN cd authentication && gunicorn authentication.wsgi:application -b 0.0.0.0:5000 --log-file /var/log/gunicorn.log
 
 EXPOSE 5000
