@@ -6,14 +6,37 @@ FROM ubuntu:14.04
 MAINTAINER V. David Zvenyach, dave@esq.io
 
 # Initialize
-RUN mkdir /home/user-data
-RUN apt-get update
-RUN apt-get install -y gnupg2
-RUN apt-get install -y python
-RUN apt-get install -y python-pip
-RUN apt-get install -y python-dev
-RUN apt-get install -y git
-RUN cd /home/user-data/; git clone https://github.com/unitedstates/authentication.git odi-authentication
-RUN cd /home/user-data/odi-authentication; pip install -r requirements.txt
+RUN apt-get update && apt-get install -y gnupg2 \
+	python \ 
+	python-pip \
+	python-dev \
+	git \
+	haveged \ 
+	nano \
+	postgresql postgresql-contrib \
+	python-psycopg2 \
+	libpq-dev \
+	libxml2-dev libxslt1-dev \
+	libncurses5-dev
 
-EXPOSE 8000
+RUN git clone https://github.com/unitedstates/authentication.git
+WORKDIR authentication
+
+RUN pip install -r requirements.txt
+
+RUN mv authentication/local_settings.py.example authentication/local_settings.py
+RUN printf '\nGNUPG_BINARY = "/usr/local/opt/gnupg2/bin/gpg2"  # for *nix"\n' >> authentication/local_settings.py
+RUN ./authentication/manage.py make_secret_key >> authentication/local_settings.py
+
+ENV FQDN=authentication.dccode.gov
+ENV EMAIL_ADDRESS=administrator@dccode.gov
+
+RUN printf "$FQDN\n$EMAIL_ADDRESS" | ./conf/nginx/gpg.sh >> authentication/local_settings.py
+RUN ./authentication/manage.py gpginit >> authentication/local_settings.py
+RUN gpg --armor --homedir authentication/gpgdata --export $EMAIL_ADDRESS > authentication/gpgdata/pubkey.asc
+RUN ln -s gpgdata/pubkey.asc authentication/authentication/authapp/static/pubkey.asc 
+
+# RUN ./authentication/manage.py syncdb
+# RUN gunicorn authentication.wsgi:application -b 0.0.0.0:5000 --log-file /var/log/gunicorn.log
+
+EXPOSE 5000

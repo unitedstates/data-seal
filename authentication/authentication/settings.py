@@ -41,8 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'django_yubico',
+#    'django_yubico',
     'authentication.authapp',
 )
 
@@ -55,10 +54,10 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-AUTHENTICATION_BACKENDS = (
-    'django_yubico.backends.YubicoBackend',
-    'django_yubico.backends.YubicoBackendRequireYubikey',
-)
+# AUTHENTICATION_BACKENDS = (
+#     'django_yubico.backends.YubicoBackend',
+#     'django_yubico.backends.YubicoBackendRequireYubikey',
+# )
 
 ROOT_URLCONF = 'authentication.urls'
 
