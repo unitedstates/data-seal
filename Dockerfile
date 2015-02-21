@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y gnupg2 \
 	libxml2-dev libxslt1-dev \
 	libncurses5-dev
 
-RUN git clone https://github.com/unitedstates/authentication.git authentication
+RUN git clone https://github.com/unitedstates/authentication.git
 WORKDIR authentication
 
 RUN pip install -r requirements.txt
@@ -33,9 +33,9 @@ ENV EMAIL_ADDRESS administrator@dccode.gov
 
 RUN printf "$FQDN\n$EMAIL_ADDRESS" | ./conf/nginx/gpg.sh >> authentication/local_settings.py
 
-RUN ./gpg_init.sh
-
+# ENTRYPOINT ["./gpg_init.sh"]
 # RUN ./authentication/manage.py syncdb
 # RUN cd authentication && gunicorn authentication.wsgi:application -b 0.0.0.0:5000 --log-file /var/log/gunicorn.log
+# sudo docker run -ti -v /dev/urandom:/dev/random -P --name auth authentication /bin/bash
 
 EXPOSE 5000
