@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Data Seal</title>
+ <link href="http://dataseal.org/" rel="self"/>
+ <link href="http://dataseal.org/"/>
+ <updated>2015-09-03T16:24:46-04:00</updated>
+ <id>http://dataseal.org/</id>
+ <author>
+   <name>U.S. Open Data</name>
+   <email>contact@usopendata.org</email>
+ </author>
+
+ 
+ 
+</feed>

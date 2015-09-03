@@ -1,0 +1,9 @@
+
+http://dataseal.org//archive.html
+http://dataseal.org//atom.xml
+http://dataseal.org//categories.html
+http://dataseal.org//index.html
+http://dataseal.org//pages.html
+http://dataseal.org//rss.xml
+http://dataseal.org//sitemap.txt
+http://dataseal.org//tags.html
